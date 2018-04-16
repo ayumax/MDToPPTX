@@ -9,51 +9,18 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Presentation;
 using P = DocumentFormat.OpenXml.Presentation;
 using D = DocumentFormat.OpenXml.Drawing;
+
 namespace MDToPPTX
 {
 
     class Program
     {
-        //static void generateShapes(ShapeTree ppshapeTree)
-        //{
-        //    AddShape.AddShape_(ppshapeTree);
-        //}
-
-        //static void Main(string[] args)
-        //{
-        //    ShapeTree ppshapeTree;
-        //    string fileName = @"C:\Users\ayuma\Desktop\sample.pptx";
-        //    PresentationDocument ppt = null;
-        //    using (ppt = PresentationDocument.Open(fileName, true))
-        //    {
-        //        Console.WriteLine("\"" + fileName + "\" has opened.");
-
-        //        // Get the relationship ID of the first slide.
-        //        PresentationPart part = ppt.PresentationPart;
-        //        OpenXmlElementList slideIds = part.Presentation.SlideIdList.ChildElements;
-        //        string relId = (slideIds[0] as SlideId).RelationshipId;
-
-        //        // Get the slide part from the relationship ID.
-        //        SlidePart ppslide = (SlidePart)part.GetPartById(relId);
-        //        if (ppslide != null)
-        //        {
-        //            ppshapeTree = ppslide.Slide.CommonSlideData.ShapeTree;
-        //            generateShapes(ppshapeTree);
-
-
-        //            ppslide.Slide.Save();
-        //            Console.WriteLine("\"" + fileName + "\" has been changed.");
-        //        }
-        //    }
-        //}
-
-
         static void Main(string[] args)
         {
-            string filepath = @"C:\Users\ayuma\Desktop\sample2.pptx";
+            string filepath = @"C:\Users\ayuma\Desktop\sample3.pptx";
             CreatePresentation(filepath);
 
-            
+
         }
 
         public static void CreatePresentation(string filepath)
@@ -65,7 +32,9 @@ namespace MDToPPTX
 
             CreatePresentationParts(presentationPart);
 
-            InsertSlide.InsertNewSlide(presentationDoc, 1, "testtest");
+            InsertNewSlide(presentationDoc, 1, "aaa");
+            InsertNewSlide(presentationDoc, 2, "bbb");
+            InsertNewSlide(presentationDoc, 3, "dcc");
 
             //Close the presentation handle
             presentationDoc.Close();
@@ -81,25 +50,21 @@ namespace MDToPPTX
 
             presentationPart.Presentation.Append(slideMasterIdList1, slideIdList1, slideSize1, notesSize1, defaultTextStyle1);
 
-            SlidePart slidePart1;
-            SlideLayoutPart slideLayoutPart1;
-            SlideMasterPart slideMasterPart1;
-            ThemePart themePart1;
 
-
-            slidePart1 = CreateSlidePart(presentationPart);
-            slideLayoutPart1 = CreateSlideLayoutPart(slidePart1);
-            slideMasterPart1 = CreateSlideMasterPart(slideLayoutPart1);
-            themePart1 = CreateTheme(slideMasterPart1);
+            SlidePart slidePart1 = CreateSlidePart(presentationPart, "rId2");
+            SlideLayoutPart slideLayoutPart1 = CreateSlideLayoutPart(slidePart1);
+            SlideMasterPart slideMasterPart1 = CreateSlideMasterPart(slideLayoutPart1);
+            ThemePart themePart1 = CreateTheme(slideMasterPart1);
 
             slideMasterPart1.AddPart(slideLayoutPart1, "rId1");
             presentationPart.AddPart(slideMasterPart1, "rId1");
             presentationPart.AddPart(themePart1, "rId5");
+
         }
 
-        private static SlidePart CreateSlidePart(PresentationPart presentationPart)
+        private static SlidePart CreateSlidePart(PresentationPart presentationPart, string SlideID)
         {
-            SlidePart slidePart1 = presentationPart.AddNewPart<SlidePart>("rId2");
+            SlidePart slidePart1 = presentationPart.AddNewPart<SlidePart>(SlideID);
             slidePart1.Slide = new Slide(
                     new CommonSlideData(
                         new ShapeTree(
@@ -113,14 +78,18 @@ namespace MDToPPTX
                                     new P.NonVisualDrawingProperties() { Id = (UInt32Value)2U, Name = "Title 1" },
                                     new P.NonVisualShapeDrawingProperties(new ShapeLocks() { NoGrouping = true }),
                                     new ApplicationNonVisualDrawingProperties(new PlaceholderShape())),
-                                new P.ShapeProperties(),
+                                new P.ShapeProperties() { Transform2D = new Transform2D() { Offset = new Offset() { X = 987136L, Y = 1267691L }, Extents = new Extents() { Cx = 4270664L, Cy = 369332L } }, },
                                 new P.TextBody(
                                     new BodyProperties(),
                                     new ListStyle(),
-                                    new Paragraph(new EndParagraphRunProperties() { Language = "en-US" }))))),
+                                    new Paragraph(new Run() { Text = new D.Text("かみのそのあゆまでう!!!") }, new EndParagraphRunProperties() { Language = "ja-JP" }))))),
                     new ColorMapOverride(new MasterColorMapping()));
+
+
             return slidePart1;
         }
+
+
 
         private static SlideLayoutPart CreateSlideLayoutPart(SlidePart slidePart1)
         {
@@ -332,5 +301,133 @@ namespace MDToPPTX
             return themePart1;
 
         }
+
+
+        // Insert the specified slide into the presentation at the specified position.
+        public static void InsertNewSlide(PresentationDocument presentationDocument, int position, string slideTitle)
+        {
+
+            if (presentationDocument == null)
+            {
+                throw new ArgumentNullException("presentationDocument");
+            }
+
+            if (slideTitle == null)
+            {
+                throw new ArgumentNullException("slideTitle");
+            }
+
+            PresentationPart presentationPart = presentationDocument.PresentationPart;
+
+            // Verify that the presentation is not empty.
+            if (presentationPart == null)
+            {
+                throw new InvalidOperationException("The presentation document is empty.");
+            }
+
+            // Declare and instantiate a new slide.
+            Slide slide = new Slide(new CommonSlideData(new ShapeTree()));
+            uint drawingObjectId = 1;
+
+            // Construct the slide content.            
+            // Specify the non-visual properties of the new slide.
+            P.NonVisualGroupShapeProperties nonVisualProperties = slide.CommonSlideData.ShapeTree.AppendChild(new P.NonVisualGroupShapeProperties());
+            nonVisualProperties.NonVisualDrawingProperties = new P.NonVisualDrawingProperties() { Id = 1, Name = "" };
+            nonVisualProperties.NonVisualGroupShapeDrawingProperties = new P.NonVisualGroupShapeDrawingProperties();
+            nonVisualProperties.ApplicationNonVisualDrawingProperties = new ApplicationNonVisualDrawingProperties();
+
+            // Specify the group shape properties of the new slide.
+            slide.CommonSlideData.ShapeTree.AppendChild(new GroupShapeProperties());
+
+            // Declare and instantiate the title shape of the new slide.
+            P.Shape titleShape = slide.CommonSlideData.ShapeTree.AppendChild(new P.Shape());
+
+            drawingObjectId++;
+
+            // Specify the required shape properties for the title shape. 
+            titleShape.NonVisualShapeProperties = new P.NonVisualShapeProperties
+                (new P.NonVisualDrawingProperties() { Id = drawingObjectId, Name = "Title" },
+                new P.NonVisualShapeDrawingProperties(new D.ShapeLocks() { NoGrouping = true }),
+                new ApplicationNonVisualDrawingProperties(new PlaceholderShape() { Type = PlaceholderValues.Title }));
+            titleShape.ShapeProperties = new P.ShapeProperties();
+
+            // Specify the text of the title shape.
+            titleShape.TextBody = new P.TextBody(new D.BodyProperties(),
+                    new D.ListStyle(),
+                    new D.Paragraph(new D.Run(new D.Text() { Text = slideTitle })));
+
+            // Declare and instantiate the body shape of the new slide.
+            P.Shape bodyShape = slide.CommonSlideData.ShapeTree.AppendChild(new P.Shape());
+            drawingObjectId++;
+
+            // Specify the required shape properties for the body shape.
+            bodyShape.NonVisualShapeProperties = new P.NonVisualShapeProperties(new P.NonVisualDrawingProperties() { Id = drawingObjectId, Name = "Content Placeholder" },
+                    new P.NonVisualShapeDrawingProperties(new D.ShapeLocks() { NoGrouping = true }),
+                    new ApplicationNonVisualDrawingProperties(new PlaceholderShape() { Index = 1 }));
+            bodyShape.ShapeProperties = new P.ShapeProperties();
+
+            // Specify the text of the body shape.
+            bodyShape.TextBody = new P.TextBody(new D.BodyProperties(),
+                    new D.ListStyle(),
+                    new D.Paragraph());
+
+            // Create the slide part for the new slide.
+            SlidePart slidePart = presentationPart.AddNewPart<SlidePart>();
+
+            // Save the new slide part.
+            slide.Save(slidePart);
+
+            // Modify the slide ID list in the presentation part.
+            // The slide ID list should not be null.
+            SlideIdList slideIdList = presentationPart.Presentation.SlideIdList;
+
+            // Find the highest slide ID in the current list.
+            uint maxSlideId = 1;
+            SlideId prevSlideId = null;
+
+            foreach (SlideId slideId in slideIdList.ChildElements)
+            {
+                if (slideId.Id > maxSlideId)
+                {
+                    maxSlideId = slideId.Id;
+                }
+
+                position--;
+                if (position == 0)
+                {
+                    prevSlideId = slideId;
+                }
+
+            }
+
+            maxSlideId++;
+
+            // Get the ID of the previous slide.
+            SlidePart lastSlidePart;
+
+            if (prevSlideId != null)
+            {
+                lastSlidePart = (SlidePart)presentationPart.GetPartById(prevSlideId.RelationshipId);
+            }
+            else
+            {
+                lastSlidePart = (SlidePart)presentationPart.GetPartById(((SlideId)(slideIdList.ChildElements[0])).RelationshipId);
+            }
+
+            // Use the same slide layout as that of the previous slide.
+            if (null != lastSlidePart.SlideLayoutPart)
+            {
+                slidePart.AddPart(lastSlidePart.SlideLayoutPart);
+            }
+
+            // Insert the new slide into the slide list after the previous slide.
+            SlideId newSlideId = slideIdList.InsertAfter(new SlideId(), prevSlideId);
+            newSlideId.Id = maxSlideId;
+            newSlideId.RelationshipId = presentationPart.GetIdOfPart(slidePart);
+
+            // Save the modified presentation.
+            presentationPart.Presentation.Save();
+        }
+
     }
 }
