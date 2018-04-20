@@ -10,6 +10,11 @@ namespace MDToPPTXSample
     {
         static void Main(string[] args)
         {
+            MDToPPTX.MDToPPTX pptxConverter = new MDToPPTX.MDToPPTX();
+
+            string filepath = @"C:\Users\ayuma\Desktop\sample3.pptx";
+
+            pptxConverter.Run(filepath);
         }
     }
 }

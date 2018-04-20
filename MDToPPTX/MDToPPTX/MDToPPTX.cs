@@ -1,12 +1,38 @@
 ﻿using System;
-using DocumentFormat.OpenXml.Presentation;
+
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Packaging;
-using Drawing = DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Presentation;
+using P = DocumentFormat.OpenXml.Presentation;
+using D = DocumentFormat.OpenXml.Drawing;
 
 namespace MDToPPTX
 {
-    class InsertSlide
+    public class MDToPPTX
     {
+        public void Run(string PPTXFilePath)
+        {
+            CreatePresentation(PPTXFilePath);
+        }
+
+        public static void CreatePresentation(string filepath)
+        {
+            // Create a presentation at a specified file path. The presentation document type is pptx, by default.
+            PresentationDocument presentationDoc = PresentationDocument.Create(filepath, PresentationDocumentType.Presentation);
+            PresentationPart presentationPart = presentationDoc.AddPresentationPart();
+            presentationPart.Presentation = new Presentation();
+
+            DefaultParts.DefaultPresentationParts.CreatePresentationParts(presentationPart);
+
+            InsertNewSlide(presentationDoc, 1, "aaa");
+            InsertNewSlide(presentationDoc, 2, "bbb");
+            InsertNewSlide(presentationDoc, 3, "dcc");
+
+            //Close the presentation handle
+            presentationDoc.Close();
+        }
+
         // Insert the specified slide into the presentation at the specified position.
         public static void InsertNewSlide(PresentationDocument presentationDocument, int position, string slideTitle)
         {
@@ -35,45 +61,45 @@ namespace MDToPPTX
 
             // Construct the slide content.            
             // Specify the non-visual properties of the new slide.
-            NonVisualGroupShapeProperties nonVisualProperties = slide.CommonSlideData.ShapeTree.AppendChild(new NonVisualGroupShapeProperties());
-            nonVisualProperties.NonVisualDrawingProperties = new NonVisualDrawingProperties() { Id = 1, Name = "" };
-            nonVisualProperties.NonVisualGroupShapeDrawingProperties = new NonVisualGroupShapeDrawingProperties();
+            P.NonVisualGroupShapeProperties nonVisualProperties = slide.CommonSlideData.ShapeTree.AppendChild(new P.NonVisualGroupShapeProperties());
+            nonVisualProperties.NonVisualDrawingProperties = new P.NonVisualDrawingProperties() { Id = 1, Name = "" };
+            nonVisualProperties.NonVisualGroupShapeDrawingProperties = new P.NonVisualGroupShapeDrawingProperties();
             nonVisualProperties.ApplicationNonVisualDrawingProperties = new ApplicationNonVisualDrawingProperties();
 
             // Specify the group shape properties of the new slide.
             slide.CommonSlideData.ShapeTree.AppendChild(new GroupShapeProperties());
 
             // Declare and instantiate the title shape of the new slide.
-            Shape titleShape = slide.CommonSlideData.ShapeTree.AppendChild(new Shape());
+            P.Shape titleShape = slide.CommonSlideData.ShapeTree.AppendChild(new P.Shape());
 
             drawingObjectId++;
 
             // Specify the required shape properties for the title shape. 
-            titleShape.NonVisualShapeProperties = new NonVisualShapeProperties
-                (new NonVisualDrawingProperties() { Id = drawingObjectId, Name = "Title" },
-                new NonVisualShapeDrawingProperties(new Drawing.ShapeLocks() { NoGrouping = true }),
+            titleShape.NonVisualShapeProperties = new P.NonVisualShapeProperties
+                (new P.NonVisualDrawingProperties() { Id = drawingObjectId, Name = "Title" },
+                new P.NonVisualShapeDrawingProperties(new D.ShapeLocks() { NoGrouping = true }),
                 new ApplicationNonVisualDrawingProperties(new PlaceholderShape() { Type = PlaceholderValues.Title }));
-            titleShape.ShapeProperties = new ShapeProperties();
+            titleShape.ShapeProperties = new P.ShapeProperties();
 
             // Specify the text of the title shape.
-            titleShape.TextBody = new TextBody(new Drawing.BodyProperties(),
-                    new Drawing.ListStyle(),
-                    new Drawing.Paragraph(new Drawing.Run(new Drawing.Text() { Text = slideTitle })));
+            titleShape.TextBody = new P.TextBody(new D.BodyProperties(),
+                    new D.ListStyle(),
+                    new D.Paragraph(new D.Run(new D.Text() { Text = slideTitle })));
 
             // Declare and instantiate the body shape of the new slide.
-            Shape bodyShape = slide.CommonSlideData.ShapeTree.AppendChild(new Shape());
+            P.Shape bodyShape = slide.CommonSlideData.ShapeTree.AppendChild(new P.Shape());
             drawingObjectId++;
 
             // Specify the required shape properties for the body shape.
-            bodyShape.NonVisualShapeProperties = new NonVisualShapeProperties(new NonVisualDrawingProperties() { Id = drawingObjectId, Name = "Content Placeholder" },
-                    new NonVisualShapeDrawingProperties(new Drawing.ShapeLocks() { NoGrouping = true }),
+            bodyShape.NonVisualShapeProperties = new P.NonVisualShapeProperties(new P.NonVisualDrawingProperties() { Id = drawingObjectId, Name = "Content Placeholder" },
+                    new P.NonVisualShapeDrawingProperties(new D.ShapeLocks() { NoGrouping = true }),
                     new ApplicationNonVisualDrawingProperties(new PlaceholderShape() { Index = 1 }));
-            bodyShape.ShapeProperties = new ShapeProperties();
+            bodyShape.ShapeProperties = new P.ShapeProperties();
 
             // Specify the text of the body shape.
-            bodyShape.TextBody = new TextBody(new Drawing.BodyProperties(),
-                    new Drawing.ListStyle(),
-                    new Drawing.Paragraph());
+            bodyShape.TextBody = new P.TextBody(new D.BodyProperties(),
+                    new D.ListStyle(),
+                    new D.Paragraph());
 
             // Create the slide part for the new slide.
             SlidePart slidePart = presentationPart.AddNewPart<SlidePart>();
@@ -132,6 +158,5 @@ namespace MDToPPTX
             // Save the modified presentation.
             presentationPart.Presentation.Save();
         }
-
     }
 }
