@@ -5,7 +5,7 @@ using DocumentFormat.OpenXml.Presentation;
 using P = DocumentFormat.OpenXml.Presentation;
 using D = DocumentFormat.OpenXml.Drawing;
 
-namespace MDToPPTX.DefaultParts
+namespace MDToPPTX.PPTX.DefaultParts
 {
     class DefaultTheme
     {
