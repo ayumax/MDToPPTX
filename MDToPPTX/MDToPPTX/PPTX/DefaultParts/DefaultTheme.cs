@@ -7,7 +7,7 @@ using D = DocumentFormat.OpenXml.Drawing;
 
 namespace MDToPPTX.PPTX.DefaultParts
 {
-    class DefaultTheme
+    internal class DefaultTheme
     {
         public static ThemePart CreateTheme(SlideMasterPart slideMasterPart1)
         {

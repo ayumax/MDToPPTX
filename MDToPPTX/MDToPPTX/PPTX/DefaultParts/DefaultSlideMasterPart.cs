@@ -7,7 +7,7 @@ using D = DocumentFormat.OpenXml.Drawing;
 
 namespace MDToPPTX.PPTX.DefaultParts
 {
-    class DefaultSlideMasterPart
+    internal class DefaultSlideMasterPart
     {
         public static SlideMasterPart CreateSlideMasterPart(SlideLayoutPart slideLayoutPart1)
         {

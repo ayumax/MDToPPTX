@@ -7,7 +7,7 @@ using D = DocumentFormat.OpenXml.Drawing;
 
 namespace MDToPPTX.PPTX.DefaultParts
 {
-    class DefaultSlidePart
+    internal class DefaultSlidePart
     {
         public static SlidePart CreateSlidePart(PresentationPart presentationPart, string SlideID, string Title)
         {
@@ -58,12 +58,6 @@ namespace MDToPPTX.PPTX.DefaultParts
                                     )
                                     ),
                     new ColorMapOverride(new MasterColorMapping()));
-
-            //A.BodyProperties bodyProperties3 = new A.BodyProperties() { Anchor = A.TextAnchoringTypeValues.Center };
-            //A.ListStyle listStyle3 = new A.ListStyle();
-
-            //A.Paragraph paragraph3 = new A.Paragraph();
-            //A.ParagraphProperties paragraphProperties1 = new A.ParagraphProperties() { Alignment = A.TextAlignmentTypeValues.Center };
 
             return slidePart1;
         }

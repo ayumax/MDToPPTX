@@ -7,7 +7,7 @@ using D = DocumentFormat.OpenXml.Drawing;
 
 namespace MDToPPTX.PPTX.DefaultParts
 {
-    class DefaultPresentationParts
+    internal class DefaultPresentationParts
     {
         public static void CreatePresentationParts(PresentationPart presentationPart, string Title)
         {

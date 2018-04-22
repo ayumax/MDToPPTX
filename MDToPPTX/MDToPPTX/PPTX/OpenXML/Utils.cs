@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MDToPPTX.PPTX
+namespace MDToPPTX.PPTX.OpenXML
 {
-    public class Utils
+    internal class Utils
     {
         private const int cm2shapescale = 360000;
         private const int degree2shapescale = 60000;
