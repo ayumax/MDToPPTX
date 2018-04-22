@@ -9,7 +9,7 @@ namespace MDToPPTX.PPTX.DefaultParts
 {
     class DefaultPresentationParts
     {
-        public static void CreatePresentationParts(PresentationPart presentationPart)
+        public static void CreatePresentationParts(PresentationPart presentationPart, string Title)
         {
             SlideMasterIdList slideMasterIdList1 = new SlideMasterIdList(new SlideMasterId() { Id = (UInt32Value)2147483648U, RelationshipId = "rId1" });
             SlideIdList slideIdList1 = new SlideIdList(new SlideId() { Id = (UInt32Value)256U, RelationshipId = "rId2" });
@@ -29,7 +29,7 @@ namespace MDToPPTX.PPTX.DefaultParts
             presentationPart.Presentation.Append(slideMasterIdList1, slideIdList1, slideSize1, notesSize1, defaultTextStyle1);
 
 
-            SlidePart slidePart1 = DefaultSlidePart.CreateSlidePart(presentationPart, "rId2");
+            SlidePart slidePart1 = DefaultSlidePart.CreateSlidePart(presentationPart, "rId2", Title);
             SlideLayoutPart slideLayoutPart1 = DefaultSlideLayoutPart.CreateSlideLayoutPart(slidePart1);
             SlideMasterPart slideMasterPart1 = DefaultSlideMasterPart.CreateSlideMasterPart(slideLayoutPart1);
             ThemePart themePart1 = DefaultTheme.CreateTheme(slideMasterPart1);

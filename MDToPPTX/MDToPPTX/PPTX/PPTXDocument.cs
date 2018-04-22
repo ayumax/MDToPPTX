@@ -17,19 +17,19 @@ namespace MDToPPTX.PPTX
 
         }
 
-        public PPTXDocument(string FilePath)
+        public PPTXDocument(string FilePath, string Title)
         {
-            Init(FilePath);
+            Init(FilePath, Title);
         }
 
-        public void Init(string FilePath)
+        public void Init(string FilePath, string Title)
         {
             // Create a presentation at a specified file path. The presentation document type is pptx, by default.
             presentationDoc = PresentationDocument.Create(FilePath, PresentationDocumentType.Presentation);
             PresentationPart presentationPart = presentationDoc.AddPresentationPart();
             presentationPart.Presentation = new Presentation();
 
-            PPTX.DefaultParts.DefaultPresentationParts.CreatePresentationParts(presentationPart);       
+            PPTX.DefaultParts.DefaultPresentationParts.CreatePresentationParts(presentationPart, Title);       
         }
 
         public void AddSlide(PPTXSlide Slide)
