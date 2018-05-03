@@ -15,14 +15,14 @@ namespace MDToPPTX.PPTX
 
         }
 
-        public PPTXDocument(string FilePath, string Title)
+        public PPTXDocument(string FilePath, string Title, string SubTitle)
         {
-            Init(FilePath, Title);
+            Init(FilePath, Title, SubTitle);
         }
 
-        public void Init(string FilePath, string Title)
+        public void Init(string FilePath, string Title, string SubTitle)
         {
-            presentationDoc = DefaultParts.DefaultPresentationDocument.CreatePresentationDocument(FilePath, Title);
+            presentationDoc = DefaultParts.DefaultPresentationDocument.CreatePresentationDocument(FilePath, Title, SubTitle);
         }
        
         public void Close()

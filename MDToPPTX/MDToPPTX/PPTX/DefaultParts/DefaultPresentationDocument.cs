@@ -1,24 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Drawing;
-using DocumentFormat.OpenXml.Packaging;
+﻿using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Presentation;
-using P = DocumentFormat.OpenXml.Presentation;
-using D = DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml;
+using P14 = DocumentFormat.OpenXml.Office2010.PowerPoint;
+using P15 = DocumentFormat.OpenXml.Office2013.PowerPoint;
+using A = DocumentFormat.OpenXml.Drawing;
+using Thm15 = DocumentFormat.OpenXml.Office2013.Theme;
+using MDToPPTX.PPTX.DefaultParts.SlideLayouts;
 
 namespace MDToPPTX.PPTX.DefaultParts
 {
     internal class DefaultPresentationDocument
     {
-        public static PresentationDocument CreatePresentationDocument(string FilePath, string Title)
+        public static PresentationDocument CreatePresentationDocument(string FilePath, string Title, string SubTitle)
         {
             var presentationDoc = PresentationDocument.Create(FilePath, PresentationDocumentType.Presentation);
             PresentationPart presentationPart = presentationDoc.AddPresentationPart();
             presentationPart.Presentation = new Presentation();
 
-            DefaultPresentationParts.CreatePresentationParts(presentationPart, Title);
+            DefaultPresentationPart.CreatePresentationPart(presentationPart, Title, SubTitle);
 
             return presentationDoc;
         }

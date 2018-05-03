@@ -8,7 +8,7 @@ namespace MDToPPTX
     {
         public void Run(string PPTXFilePath)
         {
-            using (PPTX.PPTXDocument document = new PPTX.PPTXDocument(PPTXFilePath, "たいとるABCDEFG"))
+            using (PPTX.PPTXDocument document = new PPTX.PPTXDocument(PPTXFilePath, "たいとるABCDEFG", "2018/5/3 ayumax"))
             {
                 document.Slides = new System.Collections.Generic.List<PPTX.PPTXSlide>()
                 {
