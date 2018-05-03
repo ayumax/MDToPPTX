@@ -29,9 +29,10 @@ namespace MDToPPTX.PPTX
         {
             OpenXML.SlideHelper helper = new OpenXML.SlideHelper();
 
+            int slideIndex = 7;
             foreach(var _slide in Slides)
             {
-                helper.InsertNewSlide(presentationDoc, _slide);
+                helper.InsertNewSlide(presentationDoc, _slide, slideIndex++);
             }
 
             presentationDoc?.Close();

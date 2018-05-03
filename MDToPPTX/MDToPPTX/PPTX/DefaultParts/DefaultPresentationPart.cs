@@ -27,7 +27,7 @@ namespace MDToPPTX.PPTX.DefaultParts
 
             slideMasterPart1.AddPart(slideLayoutPart1, "rId1");
             part.AddPart(slideMasterPart1, "rId1");
-            part.AddPart(themePart1, "rId12");
+            part.AddPart(themePart1, "rId5");
 
             // 残りのスライドレイアウトを追加
             for (int i = 2; i <= 11; ++i)
