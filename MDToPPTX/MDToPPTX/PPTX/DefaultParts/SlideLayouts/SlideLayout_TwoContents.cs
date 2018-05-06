@@ -8,18 +8,18 @@ using A = DocumentFormat.OpenXml.Drawing;
 
 namespace MDToPPTX.PPTX.DefaultParts.SlideLayouts
 {
-    public class SlideLayoutID4 : SlideLayoutPartBase
+    public class SlideLayout_TwoContents : SlideLayoutPartBase
     {
-        public override SlideLayoutPart CreateSlideLayoutPart(OpenXmlPartContainer containerPart, string ID)
+        public override SlideLayoutPart CreateSlideLayoutPart(OpenXmlPartContainer containerPart)
         {
-            SlideLayoutPart slideLayoutPart = containerPart.AddNewPart<SlideLayoutPart>(ID);
+            SlideLayoutPart slideLayoutPart = containerPart.AddNewPart<SlideLayoutPart>(LayoutSetting.ID);
 
             SlideLayout slideLayout10 = new SlideLayout() { Type = SlideLayoutValues.TwoObjects, Preserve = true };
             slideLayout10.AddNamespaceDeclaration("a", "http://schemas.openxmlformats.org/drawingml/2006/main");
             slideLayout10.AddNamespaceDeclaration("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
             slideLayout10.AddNamespaceDeclaration("p", "http://schemas.openxmlformats.org/presentationml/2006/main");
 
-            CommonSlideData commonSlideData12 = new CommonSlideData() { Name = "2 つのコンテンツ" };
+            CommonSlideData commonSlideData12 = new CommonSlideData() { Name = LayoutSetting.Name };
 
             ShapeTree shapeTree12 = new ShapeTree();
 

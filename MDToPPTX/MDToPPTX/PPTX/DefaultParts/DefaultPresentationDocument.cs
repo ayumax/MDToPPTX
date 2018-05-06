@@ -11,13 +11,13 @@ namespace MDToPPTX.PPTX.DefaultParts
 {
     internal class DefaultPresentationDocument
     {
-        public static PresentationDocument CreatePresentationDocument(string FilePath, string Title, string SubTitle)
+        public static PresentationDocument CreatePresentationDocument(string FilePath, PPTXSetting FileSettings)
         {
             var presentationDoc = PresentationDocument.Create(FilePath, PresentationDocumentType.Presentation);
             PresentationPart presentationPart = presentationDoc.AddPresentationPart();
             presentationPart.Presentation = new Presentation();
 
-            DefaultPresentationPart.CreatePresentationPart(presentationPart, Title, SubTitle);
+            DefaultPresentationPart.CreatePresentationPart(presentationPart, FileSettings);
 
             return presentationDoc;
         }

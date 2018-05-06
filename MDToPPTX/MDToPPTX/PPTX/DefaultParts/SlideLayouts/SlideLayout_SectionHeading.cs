@@ -8,18 +8,18 @@ using A = DocumentFormat.OpenXml.Drawing;
 
 namespace MDToPPTX.PPTX.DefaultParts.SlideLayouts
 {
-    public class SlideLayoutID3 : SlideLayoutPartBase
+    public class SlideLayout_SectionHeading : SlideLayoutPartBase
     {
-        public override SlideLayoutPart CreateSlideLayoutPart(OpenXmlPartContainer containerPart, string ID)
+        public override SlideLayoutPart CreateSlideLayoutPart(OpenXmlPartContainer containerPart)
         {
-            SlideLayoutPart slideLayoutPart = containerPart.AddNewPart<SlideLayoutPart>(ID);
+            SlideLayoutPart slideLayoutPart = containerPart.AddNewPart<SlideLayoutPart>(LayoutSetting.ID);
 
             SlideLayout slideLayout3 = new SlideLayout() { Type = SlideLayoutValues.SectionHeader, Preserve = true };
             slideLayout3.AddNamespaceDeclaration("a", "http://schemas.openxmlformats.org/drawingml/2006/main");
             slideLayout3.AddNamespaceDeclaration("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
             slideLayout3.AddNamespaceDeclaration("p", "http://schemas.openxmlformats.org/presentationml/2006/main");
 
-            CommonSlideData commonSlideData5 = new CommonSlideData() { Name = "セクション見出し" };
+            CommonSlideData commonSlideData5 = new CommonSlideData() { Name = LayoutSetting.Name };
 
             ShapeTree shapeTree5 = new ShapeTree();
 

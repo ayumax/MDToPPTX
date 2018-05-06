@@ -6,7 +6,8 @@ namespace MDToPPTX.PPTX
 {
     public class PPTXDocument : IDisposable
     {
-        public List<PPTXSlide> Slides { get; set; }
+        public PPTXSetting FileSettings { get; set; } = new PPTXSetting();
+        public List<PPTXSlide> Slides { get; set; } = new List<PPTXSlide>();
 
         private PresentationDocument presentationDoc;
 
@@ -15,24 +16,23 @@ namespace MDToPPTX.PPTX
 
         }
 
-        public PPTXDocument(string FilePath, string Title, string SubTitle)
+        public PPTXDocument(string FilePath, PPTXSetting FileSettings)
         {
-            Init(FilePath, Title, SubTitle);
+            Init(FilePath, FileSettings);
         }
 
-        public void Init(string FilePath, string Title, string SubTitle)
+        public void Init(string FilePath, PPTXSetting FileSettings)
         {
-            presentationDoc = DefaultParts.DefaultPresentationDocument.CreatePresentationDocument(FilePath, Title, SubTitle);
+            presentationDoc = DefaultParts.DefaultPresentationDocument.CreatePresentationDocument(FilePath, FileSettings);
         }
        
         public void Close()
         {
             OpenXML.SlideHelper helper = new OpenXML.SlideHelper();
 
-            int slideIndex = 7;
             foreach(var _slide in Slides)
             {
-                helper.InsertNewSlide(presentationDoc, _slide, slideIndex++);
+                helper.InsertNewSlide(presentationDoc, _slide);
             }
 
             presentationDoc?.Close();

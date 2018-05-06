@@ -9,11 +9,11 @@ namespace MDToPPTX.PPTX.DefaultParts
 {
     internal class DefaultSlidePart
     {
-        public static SlidePart CreateSlidePart(PresentationPart presentationPart, string SlideID, string Title, string SubTitle)
+        public static SlidePart CreateSlidePart(PresentationPart presentationPart, string SlideID, PPTXSetting FileSettings)
         {
             SlidePart slidePart1 = presentationPart.AddNewPart<SlidePart>(SlideID);
 
-            GenerateSlidePart1Content(slidePart1, Title, SubTitle);
+            GenerateSlidePart1Content(slidePart1, FileSettings.Title, FileSettings.SubTitle);
 
             return slidePart1;
         }

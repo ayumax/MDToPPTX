@@ -6,6 +6,10 @@ namespace MDToPPTX.PPTX
 {
     public class PPTXSlide
     {
-        public List<PPTXText> Bodys { get; set; }
+        public PPTXText Title { get; set; }
+        public List<PPTXText> Bodys { get; set; } = new List<PPTXText>();
+        
+        public PPTXSlideLayout SlideLayout { get; set; }
+
     }
 }

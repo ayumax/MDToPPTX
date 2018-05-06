@@ -13,15 +13,17 @@ namespace MDToPPTX.PPTX.DefaultParts
 {
     public class DefaultPresentationPart
     {
-        public static void CreatePresentationPart(PresentationPart part, string Title, string SubTitle)
+        public static void CreatePresentationPart(PresentationPart part, PPTXSetting FileSettings)
         {
             var partCreator = new DefaultPresentationPart();
             partCreator._CreatePresentationPart(part);
 
-            SlidePart slidePart1 = DefaultSlidePart.CreateSlidePart(part, "rId2", Title, SubTitle);
+            SlidePart slidePart1 = DefaultSlidePart.CreateSlidePart(part, "rId2", FileSettings);
 
-            var topLayoutPart = new DefaultSlideLayoutPart();
-            SlideLayoutPart slideLayoutPart1 = topLayoutPart.CreateSlideLayoutPart(slidePart1, "rId1");
+            // 1枚目のスライド追加
+            var topLayoutPart = new SlideLayout_TitleSlide();
+            topLayoutPart.Init(EPPTXSlideLayoutType.TitleSlide, FileSettings);
+            SlideLayoutPart slideLayoutPart1 = topLayoutPart.CreateSlideLayoutPart(slidePart1);
             SlideMasterPart slideMasterPart1 = DefaultSlideMasterPart.CreateSlideMasterPart(slideLayoutPart1, "rId1");
             ThemePart themePart1 = DefaultTheme.CreateTheme(slideMasterPart1);
 
@@ -30,14 +32,17 @@ namespace MDToPPTX.PPTX.DefaultParts
             part.AddPart(themePart1, "rId5");
 
             // 残りのスライドレイアウトを追加
-            for (int i = 2; i <= 11; ++i)
+            foreach (EPPTXSlideLayoutType layoutType in Enum.GetValues(typeof(EPPTXSlideLayoutType)))
             {
-                var otherLayoutPartType = Type.GetType($"MDToPPTX.PPTX.DefaultParts.SlideLayouts.SlideLayoutID{i}");
+                if (layoutType == EPPTXSlideLayoutType.TitleSlide) continue;
+
+                var otherLayoutPartType = Type.GetType($"MDToPPTX.PPTX.DefaultParts.SlideLayouts.SlideLayout_{layoutType.ToString()}");
                 if (otherLayoutPartType == null) continue;
                 SlideLayoutPartBase otherLayoutPart = Activator.CreateInstance(otherLayoutPartType) as SlideLayoutPartBase;
                 if (otherLayoutPart != null)
                 {
-                    SlideLayoutPart otherSlideLayoutPart = otherLayoutPart.CreateSlideLayoutPart(slideMasterPart1, $"rId{i}");
+                    otherLayoutPart.Init(layoutType, FileSettings);
+                    SlideLayoutPart otherSlideLayoutPart = otherLayoutPart.CreateSlideLayoutPart(slideMasterPart1);
 
                     otherSlideLayoutPart.AddPart(slideMasterPart1, "rId1");
                 }

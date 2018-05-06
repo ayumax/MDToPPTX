@@ -9,7 +9,7 @@ namespace MDToPPTX.PPTX
         /// <summary>
         /// 追加されるテキスト
         /// </summary>
-        public string Text { get; set; }
+        public string Text { get; set; } = "";
 
         /// <summary>
         /// テキストの横位置(cm)
@@ -27,5 +27,15 @@ namespace MDToPPTX.PPTX
         /// テキストの縦幅(cm)
         /// </summary>
         public int SizeY { get; set; }
+
+        public PPTXText()
+        {
+
+        }
+
+        public PPTXText(string Text)
+        {
+            this.Text = Text;
+        }
     }
 }
