@@ -52,7 +52,7 @@ namespace MDToPPTX.PPTX.OpenXML
             {
                 if (ImageIDMap.ContainsKey(imageContent.ImageFilePath))
                 {
-                    AddImageContent(shapeTree, objectID++, imageContent, PlaceholderValues.Picture, bodyIndex++);
+                    AddImageContent(shapeTree, objectID++, imageContent, PlaceholderValues.Picture);
                 }
             }
             
@@ -200,10 +200,10 @@ namespace MDToPPTX.PPTX.OpenXML
 
             ApplicationNonVisualDrawingProperties applicationNonVisualDrawingProperties78 = new ApplicationNonVisualDrawingProperties();
             PlaceholderShape placeholderShape65 = new PlaceholderShape() { Type = PlaceHolderType };
-            //if (PlaceHolderIndex != uint.MaxValue)
-            //{
-            //    placeholderShape65.Index = PlaceHolderIndex;
-            //}
+            if (PlaceHolderIndex != uint.MaxValue)
+            {
+                placeholderShape65.Index = PlaceHolderIndex;
+            }
 
             applicationNonVisualDrawingProperties78.Append(placeholderShape65);
 

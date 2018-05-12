@@ -30,7 +30,7 @@ namespace MDToPPTX
                         Images = new List<PPTXImage>()
                         {
                             new PPTXImage(){ ImageFilePath = @"C:\Users\ayuma\Pictures\P7051318.JPG",
-                                Transform = new PPTXTransform() { AutoLayout = false, PositionX = 1, PositionY = 7, SizeX = 10, SizeY = 6 }
+                                Transform = new PPTXTransform() { AutoLayout = true, PositionX = 1, PositionY = 7, SizeX = 10, SizeY = 6 }
                             }
 
                         }
@@ -49,6 +49,9 @@ namespace MDToPPTX
                         {
                             new PPTXImage(){ ImageFilePath = @"C:\Users\ayuma\Pictures\ue1.PNG",
                             Transform = new PPTXTransform() { AutoLayout = false, PositionX = 7, PositionY = 4, SizeX = 10, SizeY = 6 }
+                            },
+                             new PPTXImage(){ ImageFilePath = @"C:\Users\ayuma\Pictures\ue2.PNG",
+                            Transform = new PPTXTransform() { AutoLayout = false, PositionX = 7, PositionY = 10, SizeX = 10, SizeY = 6 }
                             }
                         }
                     }
