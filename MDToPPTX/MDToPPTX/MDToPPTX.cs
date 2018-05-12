@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using MDToPPTX.PPTX;
 
 namespace MDToPPTX
 {
@@ -6,35 +8,48 @@ namespace MDToPPTX
     {
         public void Run(string PPTXFilePath)
         {
-            var settings = new PPTX.PPTXSetting()
+            var settings = new PPTXSetting()
             {
-                SlideSize = PPTX.EPPTXSlideSizeValues.Screen4x3,
-                Title = "たいとるABCDEFG",
+                SlideSize = EPPTXSlideSizeValues.Screen4x3,
+                Title = "サンプルファイルタイトル",
                 SubTitle = "2018/5/3 ayumax"
             };
 
-            using (PPTX.PPTXDocument document = new PPTX.PPTXDocument(PPTXFilePath, settings))
+            using (PPTXDocument document = new PPTXDocument(PPTXFilePath, settings))
             {
-                document.Slides = new System.Collections.Generic.List<PPTX.PPTXSlide>()
+                document.Slides = new List<PPTXSlide>()
                 {
-                    new PPTX.PPTXSlide()
+                    new PPTXSlide()
                     {
-                        SlideLayout = settings.SlideLayouts[PPTX.EPPTXSlideLayoutType.TitleAndContents],
-                        Title = new PPTX.PPTXText("コンテンツ１つめ"),
-                        Bodys = new System.Collections.Generic.List<PPTX.PPTXText>()
+                        SlideLayout = settings.SlideLayouts[EPPTXSlideLayoutType.TitleAndContents],
+                        Title = new PPTXText("コンテンツ１ページ目"),
+                        Texts = new List<PPTXText>()
                         {
-                            new PPTX.PPTXText(){ Text = "てすとぼでぃーーーーー", PositionX = 0, PositionY = 0, SizeX = 10, SizeY = 2 },
-                            new PPTX.PPTXText(){ Text = "てすとぼでぃーーーーー2", PositionX = 0, PositionY = 2, SizeX = 10, SizeY = 2 }
+                            new PPTXText(){ Text = "本文です。\nここに書いていく" }
+                        },
+                        Images = new List<PPTXImage>()
+                        {
+                            new PPTXImage(){ ImageFilePath = @"C:\Users\ayuma\Pictures\P7051318.JPG",
+                                Transform = new PPTXTransform() { AutoLayout = false, PositionX = 1, PositionY = 7, SizeX = 10, SizeY = 6 }
+                            }
+
                         }
                     },
-                    new PPTX.PPTXSlide()
+                    new PPTXSlide()
                     {
-                        SlideLayout = settings.SlideLayouts[PPTX.EPPTXSlideLayoutType.TwoContents],
-                        Title = new PPTX.PPTXText("コンテンツ２つめ"),
-                        Bodys = new System.Collections.Generic.List<PPTX.PPTXText>()
+                        SlideLayout = settings.SlideLayouts[EPPTXSlideLayoutType.TitleAndContents],
+                        Texts = new List<PPTXText>()
                         {
-                            new PPTX.PPTXText(){ Text = "パワーポイント2枚目のテキスト１" },
-                            new PPTX.PPTXText(){ Text = "テキスト２\r\n２行目" }
+                            new PPTXText(){ Text = "パワーポイント2枚目のテキスト１",
+                                            Transform = new PPTXTransform() { AutoLayout = false, PositionX = 1, PositionY = 3, SizeX = 20, SizeY = 3 }},
+                            new PPTXText(){ Text = "テキスト２\r\n２行目",
+                            Transform = new PPTXTransform() { AutoLayout = false, PositionX = 1, PositionY = 6, SizeX = 10, SizeY = 6 } }
+                        },
+                        Images = new List<PPTXImage>()
+                        {
+                            new PPTXImage(){ ImageFilePath = @"C:\Users\ayuma\Pictures\ue1.PNG",
+                            Transform = new PPTXTransform() { AutoLayout = false, PositionX = 7, PositionY = 4, SizeX = 10, SizeY = 6 }
+                            }
                         }
                     }
                 };

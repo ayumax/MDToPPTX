@@ -1,20 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Presentation;
 using DocumentFormat.OpenXml;
 using P14 = DocumentFormat.OpenXml.Office2010.PowerPoint;
 using P15 = DocumentFormat.OpenXml.Office2013.PowerPoint;
 using A = DocumentFormat.OpenXml.Drawing;
+using A14 = DocumentFormat.OpenXml.Office2010.Drawing;
 
 namespace MDToPPTX.PPTX.OpenXML
 {
     internal class SlideHelper
     {
-        public void InsertNewSlide(PresentationDocument presentationDocument, PPTXSlide SlideContent)
+        private PPTXSlide SlideContent;
+        private Dictionary<string, string> ImageIDMap = new Dictionary<string, string>();
+
+        public SlideHelper(PPTXSlide SlideContent)
+        {
+            this.SlideContent = SlideContent;
+        }
+
+        public void InsertNewSlide(PresentationDocument presentationDocument)
         {
             var presentationPart = presentationDocument.PresentationPart;
             SlidePart slidePart1 = presentationPart.AddNewPart<SlidePart>();
@@ -33,10 +41,21 @@ namespace MDToPPTX.PPTX.OpenXML
             }
 
             uint bodyIndex = 1;
-            foreach(var bodyContent in SlideContent.Bodys)
+            foreach(var bodyContent in SlideContent.Texts)
             {
                 AddContent(shapeTree, objectID++, bodyContent, PlaceholderValues.Body, bodyIndex++);
             }
+
+            CreateImageMap(slidePart1);
+
+            foreach (var imageContent in SlideContent.Images)
+            {
+                if (ImageIDMap.ContainsKey(imageContent.ImageFilePath))
+                {
+                    AddImageContent(shapeTree, objectID++, imageContent, PlaceholderValues.Picture, bodyIndex++);
+                }
+            }
+            
 
             slide1.Save(slidePart1);
 
@@ -113,37 +132,10 @@ namespace MDToPPTX.PPTX.OpenXML
         private void AddContent(ShapeTree shapeTree1, uint ObjectID, PPTXText Content, PlaceholderValues PlaceHolderType, uint PlaceHolderIndex = uint.MaxValue)
         {
             Shape shape1 = new Shape();
-            //shape1.ShapeProperties = new ShapeProperties()
-            //{
-            //    Transform2D = new A.Transform2D()
-            //    {
-            //        Offset = new A.Offset()
-            //        {
-            //            X = Utils.GetCmToShapeScale(Content.PositionX),
-            //            Y = Utils.GetCmToShapeScale(Content.PositionY)
-            //        },
-            //        Extents = new A.Extents()
-            //        {
-            //            Cx = Utils.GetCmToShapeScale(Content.SizeX),
-            //            Cy = Utils.GetCmToShapeScale(Content.SizeY)
-            //        }
-            //    }
-            //};
+
             NonVisualShapeProperties nonVisualShapeProperties1 = new NonVisualShapeProperties();
 
             NonVisualDrawingProperties nonVisualDrawingProperties2 = new NonVisualDrawingProperties() { Id = ObjectID, Name = $"Content{ObjectID}" };
-
-            A.NonVisualDrawingPropertiesExtensionList nonVisualDrawingPropertiesExtensionList1 = new A.NonVisualDrawingPropertiesExtensionList();
-
-            A.NonVisualDrawingPropertiesExtension nonVisualDrawingPropertiesExtension1 = new A.NonVisualDrawingPropertiesExtension() { Uri = "{FF2B5EF4-FFF2-40B4-BE49-F238E27FC236}" };
-
-            OpenXmlUnknownElement openXmlUnknownElement1 = OpenXmlUnknownElement.CreateOpenXmlUnknownElement("<a16:creationId xmlns:a16=\"http://schemas.microsoft.com/office/drawing/2014/main\" id=\"{52109794-5E44-448D-BD9A-AC05EC967B66}\" />");
-
-            nonVisualDrawingPropertiesExtension1.Append(openXmlUnknownElement1);
-
-            nonVisualDrawingPropertiesExtensionList1.Append(nonVisualDrawingPropertiesExtension1);
-
-            nonVisualDrawingProperties2.Append(nonVisualDrawingPropertiesExtensionList1);
 
             NonVisualShapeDrawingProperties nonVisualShapeDrawingProperties1 = new NonVisualShapeDrawingProperties();
             A.ShapeLocks shapeLocks1 = new A.ShapeLocks() { NoGrouping = true };
@@ -171,6 +163,12 @@ namespace MDToPPTX.PPTX.OpenXML
             textBody1.Append(bodyProperties1);
             textBody1.Append(listStyle1);
 
+            A.Transform2D transform2D25 = CreateTransform2D(Content.Transform);
+            if (transform2D25 != null)
+            {
+                shapeProperties1.Append(transform2D25);
+            }
+
             shape1.Append(nonVisualShapeProperties1);
             shape1.Append(shapeProperties1);
             shape1.Append(textBody1);
@@ -185,6 +183,59 @@ namespace MDToPPTX.PPTX.OpenXML
             }
 
             shapeTree1.Append(shape1);
+        }
+        
+        private void AddImageContent(ShapeTree shapeTree1, uint ObjectID, PPTXImage Content, PlaceholderValues PlaceHolderType, uint PlaceHolderIndex = uint.MaxValue)
+        {
+            Picture picture1 = new Picture();
+
+            NonVisualPictureProperties nonVisualPictureProperties1 = new NonVisualPictureProperties();
+
+            NonVisualDrawingProperties nonVisualDrawingProperties78 = new NonVisualDrawingProperties() { Id = ObjectID, Name = $"Content{ObjectID}" };
+
+            NonVisualPictureDrawingProperties nonVisualPictureDrawingProperties1 = new NonVisualPictureDrawingProperties();
+            A.PictureLocks pictureLocks1 = new A.PictureLocks() { NoGrouping = true, NoChangeAspect = false };
+
+            nonVisualPictureDrawingProperties1.Append(pictureLocks1);
+
+            ApplicationNonVisualDrawingProperties applicationNonVisualDrawingProperties78 = new ApplicationNonVisualDrawingProperties();
+            PlaceholderShape placeholderShape65 = new PlaceholderShape() { Type = PlaceHolderType };
+            //if (PlaceHolderIndex != uint.MaxValue)
+            //{
+            //    placeholderShape65.Index = PlaceHolderIndex;
+            //}
+
+            applicationNonVisualDrawingProperties78.Append(placeholderShape65);
+
+            nonVisualPictureProperties1.Append(nonVisualDrawingProperties78);
+            nonVisualPictureProperties1.Append(nonVisualPictureDrawingProperties1);
+            nonVisualPictureProperties1.Append(applicationNonVisualDrawingProperties78);
+
+            BlipFill blipFill1 = new BlipFill();
+
+            A.Blip blip1 = new A.Blip() { Embed = ImageIDMap[Content.ImageFilePath] };
+
+            A.Stretch stretch1 = new A.Stretch();
+            A.FillRectangle fillRectangle1 = new A.FillRectangle();
+
+            stretch1.Append(fillRectangle1);
+
+            blipFill1.Append(blip1);
+            blipFill1.Append(stretch1);
+
+            ShapeProperties shapeProperties65 = new ShapeProperties();
+
+            A.Transform2D transform2D25 = CreateTransform2D(Content.Transform);
+            if (transform2D25 != null)
+            {
+                shapeProperties65.Append(transform2D25);
+            }
+
+            picture1.Append(nonVisualPictureProperties1);
+            picture1.Append(blipFill1);
+            picture1.Append(shapeProperties65);
+
+            shapeTree1.Append(picture1);
         }
 
         private void SetSlideID(PresentationPart presentationPart, SlidePart slidePart1)
@@ -210,6 +261,77 @@ namespace MDToPPTX.PPTX.OpenXML
             SlideId newSlideId = slideIdList.AppendChild(new SlideId());
             newSlideId.Id = maxSlideId;
             newSlideId.RelationshipId = presentationPart.GetIdOfPart(slidePart1);
+        }
+
+        private A.Transform2D CreateTransform2D(PPTXTransform transform)
+        {
+            A.Transform2D transform2D25 = null;
+
+            if (transform.AutoLayout == false)
+            {
+                transform2D25 = new A.Transform2D()
+                {
+                    Offset = new A.Offset()
+                    {
+                        X = Utils.GetCmToShapeScale(transform.PositionX),
+                        Y = Utils.GetCmToShapeScale(transform.PositionY)
+                    },
+                    Extents = new A.Extents()
+                    {
+                        Cx = Utils.GetCmToShapeScale(transform.SizeX),
+                        Cy = Utils.GetCmToShapeScale(transform.SizeY)
+                    }
+                };
+            }
+           
+
+            return transform2D25;
+        }
+
+        private void CreateImageMap(SlidePart slidePart1)
+        {
+            for (int i = 0; i < SlideContent.Images.Count; ++i)
+            {
+                var imageFilePath = SlideContent.Images[i].ImageFilePath;
+                if (System.IO.File.Exists(imageFilePath) == false)
+                {
+                    continue;
+                }
+
+                if (ImageIDMap.ContainsKey(imageFilePath))
+                {
+                    continue;
+                }
+
+                var fileExt = Path.GetExtension(imageFilePath).ToLower();
+                var mime = "text/plain";
+                switch (fileExt)
+                {
+                    case ".png":
+                        mime = "image/png";
+                        break;
+                    case ".jpeg":
+                    case ".jpg":
+                        mime = "image/jpeg";
+                        break;
+                    case ".bmp":
+                        mime = "image/bmp";
+                        break;
+                    case ".gif":
+                        mime = "image/gif";
+                        break;
+                }
+
+                var imageID = $"rId{i + 2}";
+
+                ImagePart imagePart1 = slidePart1.AddNewPart<ImagePart>(mime, imageID);
+                using (System.IO.FileStream stream = new System.IO.FileStream(imageFilePath, System.IO.FileMode.Open))
+                {
+                    imagePart1.FeedData(stream);
+                }
+
+                ImageIDMap.Add(imageFilePath, imageID);
+            }
         }
     }
 }

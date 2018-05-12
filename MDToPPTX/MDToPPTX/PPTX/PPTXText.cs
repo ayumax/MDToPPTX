@@ -12,21 +12,9 @@ namespace MDToPPTX.PPTX
         public string Text { get; set; } = "";
 
         /// <summary>
-        /// テキストの横位置(cm)
+        /// テキストの位置
         /// </summary>
-        public int PositionX { get; set; }
-        /// <summary>
-        /// テキストの縦位置(cm)
-        /// </summary>
-        public int PositionY { get; set; }
-        /// <summary>
-        /// テキストの横幅(cm)
-        /// </summary>
-        public int SizeX { get; set; }
-        /// <summary>
-        /// テキストの縦幅(cm)
-        /// </summary>
-        public int SizeY { get; set; }
+        public PPTXTransform Transform { get; set; } = new PPTXTransform();
 
         public PPTXText()
         {
