@@ -11,7 +11,7 @@ namespace MDToPPTX
             var settings = new PPTXSetting()
             {
                 SlideSize = EPPTXSlideSizeValues.Screen4x3,
-                Title = "サンプルファイルタイトル",
+                Title = "パワポサンプル",
                 SubTitle = "2018/5/3 ayumax"
             };
 
@@ -22,37 +22,34 @@ namespace MDToPPTX
                     new PPTXSlide()
                     {
                         SlideLayout = settings.SlideLayouts[EPPTXSlideLayoutType.TitleAndContents],
-                        Title = new PPTXText("コンテンツ１ページ目"),
-                        Texts = new List<PPTXText>()
+                        Title = new PPTXTextArea("コンテンツ１ページ目"),
+                        TextAreas = new List<PPTXTextArea>()
                         {
-                            new PPTXText(){ Text = "本文です。\nここに書いていく" }
-                        },
-                        Images = new List<PPTXImage>()
-                        {
-                            new PPTXImage(){ ImageFilePath = @"C:\Users\ayuma\Pictures\P7051318.JPG",
-                                Transform = new PPTXTransform() { AutoLayout = true, PositionX = 1, PositionY = 7, SizeX = 10, SizeY = 6 }
-                            }
-
+                            new PPTXTextArea("本文です。\n\\nをいれると改行もされます")
                         }
                     },
                     new PPTXSlide()
                     {
-                        SlideLayout = settings.SlideLayouts[EPPTXSlideLayoutType.TitleAndContents],
-                        Texts = new List<PPTXText>()
+                        SlideLayout = settings.SlideLayouts[EPPTXSlideLayoutType.TitleOnly],
+                        Title = new PPTXTextArea("コンテンツ２ページ目"),
+                        TextAreas = new List<PPTXTextArea>()
                         {
-                            new PPTXText(){ Text = "パワーポイント2枚目のテキスト１",
-                                            Transform = new PPTXTransform() { AutoLayout = false, PositionX = 1, PositionY = 3, SizeX = 20, SizeY = 3 }},
-                            new PPTXText(){ Text = "テキスト２\r\n２行目",
-                            Transform = new PPTXTransform() { AutoLayout = false, PositionX = 1, PositionY = 6, SizeX = 10, SizeY = 6 } }
+                            new PPTXTextArea("パワーポイント2枚目のテキスト１", 1, 5, 20, 2),
+                            new PPTXTextArea(1, 7, 20, 7)
+                            {
+                                Texts = new List<PPTXText>()
+                                {
+                                    new PPTXText("2枚目1行目", PPTXBullet.Circle),
+                                    new PPTXText("2枚目2行目", PPTXBullet.Circle),
+                                    new PPTXText("2枚目3行目", PPTXBullet.Rectangle),
+                                    new PPTXText("2枚目4行目 箇条書き解除")
+                                }
+                            }
                         },
                         Images = new List<PPTXImage>()
                         {
-                            new PPTXImage(){ ImageFilePath = @"C:\Users\ayuma\Pictures\ue1.PNG",
-                            Transform = new PPTXTransform() { AutoLayout = false, PositionX = 7, PositionY = 4, SizeX = 10, SizeY = 6 }
-                            },
-                             new PPTXImage(){ ImageFilePath = @"C:\Users\ayuma\Pictures\ue2.PNG",
-                            Transform = new PPTXTransform() { AutoLayout = false, PositionX = 7, PositionY = 10, SizeX = 10, SizeY = 6 }
-                            }
+                            new PPTXImage(@"C:\temp\sample.jpg", 1, 15, 5, 3),
+                            new PPTXImage(@"C:\temp\sample.jpg", 7, 15, 5, 3)
                         }
                     }
                 };

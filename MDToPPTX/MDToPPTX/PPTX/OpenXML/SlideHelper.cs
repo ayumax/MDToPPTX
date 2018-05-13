@@ -41,7 +41,7 @@ namespace MDToPPTX.PPTX.OpenXML
             }
 
             uint bodyIndex = 1;
-            foreach(var bodyContent in SlideContent.Texts)
+            foreach(var bodyContent in SlideContent.TextAreas)
             {
                 AddContent(shapeTree, objectID++, bodyContent, PlaceholderValues.Body, bodyIndex++);
             }
@@ -129,7 +129,7 @@ namespace MDToPPTX.PPTX.OpenXML
 
         }
 
-        private void AddContent(ShapeTree shapeTree1, uint ObjectID, PPTXText Content, PlaceholderValues PlaceHolderType, uint PlaceHolderIndex = uint.MaxValue)
+        private void AddContent(ShapeTree shapeTree1, uint ObjectID, PPTXTextArea Content, PlaceholderValues PlaceHolderType, uint PlaceHolderIndex = uint.MaxValue)
         {
             Shape shape1 = new Shape();
 
@@ -143,7 +143,7 @@ namespace MDToPPTX.PPTX.OpenXML
             nonVisualShapeDrawingProperties1.Append(shapeLocks1);
 
             ApplicationNonVisualDrawingProperties applicationNonVisualDrawingProperties2 = new ApplicationNonVisualDrawingProperties();
-            PlaceholderShape placeholderShape1 = new PlaceholderShape() { Type = PlaceHolderType };
+            PlaceholderShape placeholderShape1 = new PlaceholderShape();// { Type = PlaceHolderType };
             if (PlaceHolderIndex != uint.MaxValue)
             {
                 placeholderShape1.Index = PlaceHolderIndex;
@@ -173,12 +173,13 @@ namespace MDToPPTX.PPTX.OpenXML
             shape1.Append(shapeProperties1);
             shape1.Append(textBody1);
 
-            var _textLines = Content.Text.Split(new char[] { '\n' });
-
-            foreach (var _textLine in _textLines)
+            foreach (var _textLine in Content.Texts)
             {
+                var paragraphPorp = CrateParagraphProperties(_textLine);
+
                 shape1.TextBody.Append(
-                    new A.Paragraph(new A.Run() { Text = new A.Text(_textLine.Trim('\r')) })
+                    new A.Paragraph(paragraphPorp,
+                                    new A.Run() { Text = new A.Text(_textLine.Text) })
                     );
             }
 
@@ -199,7 +200,7 @@ namespace MDToPPTX.PPTX.OpenXML
             nonVisualPictureDrawingProperties1.Append(pictureLocks1);
 
             ApplicationNonVisualDrawingProperties applicationNonVisualDrawingProperties78 = new ApplicationNonVisualDrawingProperties();
-            PlaceholderShape placeholderShape65 = new PlaceholderShape() { Type = PlaceHolderType };
+            PlaceholderShape placeholderShape65 = new PlaceholderShape();// { Type = PlaceHolderType };
             if (PlaceHolderIndex != uint.MaxValue)
             {
                 placeholderShape65.Index = PlaceHolderIndex;
@@ -332,6 +333,63 @@ namespace MDToPPTX.PPTX.OpenXML
 
                 ImageIDMap.Add(imageFilePath, imageID);
             }
+        }
+
+        private A.ParagraphProperties CrateParagraphProperties(PPTXText Content)
+        {
+            var paragraphPorp = new A.ParagraphProperties();
+
+            switch(Content.Bullet)
+            {
+                case PPTXBullet.None:
+                    paragraphPorp.Append(new A.NoBullet());
+                    break;
+
+                case PPTXBullet.Circle:
+                    paragraphPorp.Append(new A.BulletFont() { Typeface = "Wingdings", Panose = "05000000000000000000", PitchFamily = 2, CharacterSet = 2 });
+                    paragraphPorp.Append(new A.CharacterBullet() { Char = "l" });
+                    break;
+
+                case PPTXBullet.Rectangle:
+                    paragraphPorp.Append(new A.BulletFont() { Typeface = "Wingdings", Panose = "05000000000000000000", PitchFamily = 2, CharacterSet = 2 });
+                    paragraphPorp.Append(new A.CharacterBullet() { Char = "n" });
+                    break;
+
+                case PPTXBullet.Diamond:
+                    paragraphPorp.Append(new A.BulletFont() { Typeface = "Wingdings", Panose = "05000000000000000000", PitchFamily = 2, CharacterSet = 2 });
+                    paragraphPorp.Append(new A.CharacterBullet() { Char = "u" });
+                    break;
+
+                case PPTXBullet.RectangleBorder:
+                    paragraphPorp.Append(new A.BulletFont() { Typeface = "Wingdings", Panose = "05000000000000000000", PitchFamily = 2, CharacterSet = 2 });
+                    paragraphPorp.Append(new A.CharacterBullet() { Char = "p" });
+                    break;
+
+                case PPTXBullet.Check:
+                    paragraphPorp.Append(new A.BulletFont() { Typeface = "Wingdings", Panose = "05000000000000000000", PitchFamily = 2, CharacterSet = 2 });
+                    paragraphPorp.Append(new A.CharacterBullet() { Char = "ü" });
+                    break;
+
+                case PPTXBullet.Arrow:
+                    paragraphPorp.Append(new A.BulletFont() { Typeface = "Wingdings", Panose = "05000000000000000000", PitchFamily = 2, CharacterSet = 2 });
+                    paragraphPorp.Append(new A.CharacterBullet() { Char = "Ø" });
+                    break;
+
+                case PPTXBullet.MiniCircle:
+                    break;
+
+                case PPTXBullet.Number:
+                    paragraphPorp.Append(new A.BulletFont() { Typeface = "+mj-lt" });
+                    paragraphPorp.Append(new A.AutoNumberedBullet() { Type = A.TextAutoNumberSchemeValues.ArabicPeriod });
+                    break;
+
+                case PPTXBullet.CircleNumber:
+                    paragraphPorp.Append(new A.BulletFont() { Typeface = "+mj-ea" });
+                    paragraphPorp.Append(new A.AutoNumberedBullet() { Type = A.TextAutoNumberSchemeValues.CircleNumberDoubleBytePlain });
+                    break;
+            }
+
+            return paragraphPorp;
         }
     }
 }
