@@ -6,8 +6,18 @@ namespace MDToPPTX
 {
     public class MDToPPTX
     {
-        public void Run(string PPTXFilePath)
+        public void Run(string MarkdownFilePath)
         {
+            var parsedMarkdown = Markdig.Markdown.Parse(
+                "# sample markdown\n" + 
+                "てすとです\n" + 
+                "てすとなんです\n" + 
+                "\n" + 
+                "---\n" +
+                "\n" +
+                "箇条書き\n" +
+                "あああ");
+
             var settings = new PPTXSetting()
             {
                 SlideSize = EPPTXSlideSizeValues.Screen4x3,
@@ -15,45 +25,21 @@ namespace MDToPPTX
                 SubTitle = "2018/5/3 ayumax"
             };
 
-            using (PPTXDocument document = new PPTXDocument(PPTXFilePath, settings))
+            using (PPTXDocument document = new PPTXDocument(MarkdownFilePath.ToLower().Replace(".md", ".pptx"), settings))
             {
-                document.Slides = new List<PPTXSlide>()
+                document.Slides = new List<PPTXSlide>();
+                var currentSlide = new PPTXSlide();
+
+                foreach (var _markdownItem in parsedMarkdown)
                 {
-                    new PPTXSlide()
-                    {
-                        SlideLayout = settings.SlideLayouts[EPPTXSlideLayoutType.TitleAndContents],
-                        Title = new PPTXTextArea("コンテンツ１ページ目"),
-                        TextAreas = new List<PPTXTextArea>()
-                        {
-                            new PPTXTextArea("本文です。\n\\nをいれると改行もされます")
-                        }
-                    },
-                    new PPTXSlide()
-                    {
-                        SlideLayout = settings.SlideLayouts[EPPTXSlideLayoutType.TitleOnly],
-                        Title = new PPTXTextArea("コンテンツ２ページ目"),
-                        TextAreas = new List<PPTXTextArea>()
-                        {
-                            new PPTXTextArea("パワーポイント2枚目のテキスト１", 1, 5, 20, 2),
-                            new PPTXTextArea(1, 7, 20, 7)
-                            {
-                                Texts = new List<PPTXText>()
-                                {
-                                    new PPTXText("2枚目1行目", PPTXBullet.Circle),
-                                    new PPTXText("2枚目2行目", PPTXBullet.Circle),
-                                    new PPTXText("2枚目3行目", PPTXBullet.Rectangle),
-                                    new PPTXText("2枚目4行目 箇条書き解除")
-                                }
-                            }
-                        },
-                        Images = new List<PPTXImage>()
-                        {
-                            new PPTXImage(@"C:\temp\sample.jpg", 1, 15, 5, 3),
-                            new PPTXImage(@"C:\temp\sample.jpg", 7, 15, 5, 3)
-                        }
-                    }
-                };
-            }               
+                    System.Diagnostics.Debug.WriteLine(_markdownItem);
+                }
+
+            }
+
+           
         }   
+
+       
     }
 }
