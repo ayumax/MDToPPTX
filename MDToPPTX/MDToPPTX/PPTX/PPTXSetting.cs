@@ -110,6 +110,13 @@ namespace MDToPPTX.PPTX
 
     }
 
+    public class PPTXSlideMargin
+    {
+        public int Left { get; set; } = 1;
+        public int Top { get; set; } = 1;
+        public int Right { get; set; } = 1;
+        public int Bottom { get; set; } = 1;
+    }
 
     public class PPTXSetting
     {
@@ -118,6 +125,8 @@ namespace MDToPPTX.PPTX
 
         public string Title { get; set; } = "無題";
         public string SubTitle { get; set; } = "-";
+
+        public PPTXSlideMargin Margin { get; set; } = new PPTXSlideMargin();
 
         public PPTXSetting()
         {

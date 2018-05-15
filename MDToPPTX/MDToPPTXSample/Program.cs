@@ -14,7 +14,7 @@ namespace MDToPPTXSample
         {
             MDToPPTX.MDToPPTX pptxConverter = new MDToPPTX.MDToPPTX();
 
-            string filepath = @"C:\Users\ayuma\Desktop\sample3.pptx";
+            string filepath = @"C:\Users\ayuma\Documents\temp\testMarkdown.md";
 
             pptxConverter.Run(filepath);
         }

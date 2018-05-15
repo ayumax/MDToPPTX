@@ -1,22 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using MDToPPTX.PPTX;
+using MDToPPTX.Markdown;
+using MDToPPTX.Markdown.SyntaxWriter;
 
 namespace MDToPPTX
 {
     public class MDToPPTX
     {
+        private Dictionary<Type, SyntaxWriterBase> SyntaxWriter;
+
+        public MDToPPTX()
+        {
+            SyntaxWriter = new Dictionary<Type, SyntaxWriterBase>();
+            SyntaxWriter.Add(typeof(Markdig.Syntax.HeadingBlock), new HeadingBlockWriter());
+            SyntaxWriter.Add(typeof(Markdig.Syntax.ParagraphBlock), new ParagraphBlockWriter());
+        }
+
         public void Run(string MarkdownFilePath)
         {
-            var parsedMarkdown = Markdig.Markdown.Parse(
-                "# sample markdown\n" + 
-                "てすとです\n" + 
-                "てすとなんです\n" + 
-                "\n" + 
-                "---\n" +
-                "\n" +
-                "箇条書き\n" +
-                "あああ");
+            var markdownText = "";
+            using (StreamReader sr = new StreamReader(MarkdownFilePath))
+            {
+                markdownText = sr.ReadToEnd();
+            }
+
+            var parsedMarkdown = Markdig.Markdown.Parse(markdownText);
 
             var settings = new PPTXSetting()
             {
@@ -27,17 +37,18 @@ namespace MDToPPTX
 
             using (PPTXDocument document = new PPTXDocument(MarkdownFilePath.ToLower().Replace(".md", ".pptx"), settings))
             {
-                document.Slides = new List<PPTXSlide>();
-                var currentSlide = new PPTXSlide();
+                var slide = new SlideManager(document, settings);
 
                 foreach (var _markdownItem in parsedMarkdown)
                 {
-                    System.Diagnostics.Debug.WriteLine(_markdownItem);
+                    var _markdownType = _markdownItem.GetType();
+                    if (SyntaxWriter.ContainsKey(_markdownType))
+                    {
+                        SyntaxWriter[_markdownType].Write(_markdownItem, slide);
+                    }
                 }
-
             }
 
-           
         }   
 
        

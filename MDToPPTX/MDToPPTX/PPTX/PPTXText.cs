@@ -16,6 +16,10 @@ namespace MDToPPTX.PPTX
         /// </summary>
         public PPTXBullet Bullet { get; set; } = PPTXBullet.None;
 
+        public int FontSize { get; set; } = 28;
+
+        public string FontFamily { get; set; } = "メイリオ";
+
         public PPTXText()
         {
 

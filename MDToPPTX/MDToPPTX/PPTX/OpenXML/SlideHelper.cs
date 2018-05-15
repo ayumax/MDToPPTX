@@ -179,7 +179,11 @@ namespace MDToPPTX.PPTX.OpenXML
 
                 shape1.TextBody.Append(
                     new A.Paragraph(paragraphPorp,
-                                    new A.Run() { Text = new A.Text(_textLine.Text) })
+                                    new A.Run()
+                                    {
+                                        RunProperties = CreateRunProperties(_textLine),
+                                        Text = new A.Text(_textLine.Text)
+                                    })
                     );
             }
 
@@ -391,5 +395,18 @@ namespace MDToPPTX.PPTX.OpenXML
 
             return paragraphPorp;
         }
+
+        private A.RunProperties CreateRunProperties(PPTXText Text)
+        {
+            A.RunProperties runProperties3 = new A.RunProperties() { Language = "ja-JP", AlternativeLanguage = "en-US", FontSize = Text.FontSize * 100, Dirty = false };
+            A.LatinFont latinFont1 = new A.LatinFont() { Typeface = Text.FontFamily, Panose = "020B0604030504040204", PitchFamily = 50, CharacterSet = -128 };
+            A.EastAsianFont eastAsianFont1 = new A.EastAsianFont() { Typeface = Text.FontFamily, Panose = "020B0604030504040204", PitchFamily = 50, CharacterSet = -128 };
+
+            runProperties3.Append(latinFont1);
+            runProperties3.Append(eastAsianFont1);
+
+            return runProperties3;
+        }
     }
+
 }
