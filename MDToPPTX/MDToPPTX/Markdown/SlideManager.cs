@@ -8,7 +8,7 @@ namespace MDToPPTX.Markdown
     class SlideManager
     {
         public PPTXSlide currentSlide { get; private set; }
-        public int LastPositionY { get; set; }
+        public float LastPositionY { get; set; }
 
         public PPTXDocument document { get; private set; }
         public PPTXSetting Settings { get; private set; }

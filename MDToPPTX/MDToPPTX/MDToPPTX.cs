@@ -16,6 +16,7 @@ namespace MDToPPTX
             SyntaxWriter = new Dictionary<Type, SyntaxWriterBase>();
             SyntaxWriter.Add(typeof(Markdig.Syntax.HeadingBlock), new HeadingBlockWriter());
             SyntaxWriter.Add(typeof(Markdig.Syntax.ParagraphBlock), new ParagraphBlockWriter());
+            SyntaxWriter.Add(typeof(Markdig.Syntax.FencedCodeBlock), new FencedCodeBlockWriter());
         }
 
         public void Run(string MarkdownFilePath)

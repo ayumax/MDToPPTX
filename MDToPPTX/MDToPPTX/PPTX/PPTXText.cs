@@ -16,9 +16,7 @@ namespace MDToPPTX.PPTX
         /// </summary>
         public PPTXBullet Bullet { get; set; } = PPTXBullet.None;
 
-        public int FontSize { get; set; } = 28;
-
-        public string FontFamily { get; set; } = "メイリオ";
+        public PPTXFont Font { get; set; } = new PPTXFont();
 
         public PPTXText()
         {
@@ -66,7 +64,7 @@ namespace MDToPPTX.PPTX
             this.Transform = new PPTXTransform();
         }
 
-        public PPTXTextArea(string Text, int PositionX, int PositionY, int SizeX, int SizeY)
+        public PPTXTextArea(string Text, float PositionX, float PositionY, float SizeX, float SizeY)
         {
             this.Texts = new List<PPTXText>()
             {
@@ -83,7 +81,7 @@ namespace MDToPPTX.PPTX
             };
         }
 
-        public PPTXTextArea(int PositionX, int PositionY, int SizeX, int SizeY)
+        public PPTXTextArea(float PositionX, float PositionY, float SizeX, float SizeY)
         {
             this.Texts = new List<PPTXText>();
 

@@ -10,23 +10,32 @@ namespace MDToPPTX.PPTX
         /// <summary>
         /// 横位置(cm)
         /// </summary>
-        public int PositionX { get; set; }
+        public float PositionX { get; set; }
         /// <summary>
         /// 縦位置(cm)
         /// </summary>
-        public int PositionY { get; set; }
+        public float PositionY { get; set; }
         /// <summary>
         /// 横幅(cm)
         /// </summary>
-        public int SizeX { get; set; }
+        public float SizeX { get; set; }
         /// <summary>
         /// 縦幅(cm)
         /// </summary>
-        public int SizeY { get; set; }
+        public float SizeY { get; set; }
 
         public PPTXTransform()
         {
 
+        }
+
+        public PPTXTransform(float PositionX, float PositionY, float SizeX, float SizeY)
+        {
+            this.AutoLayout = false;
+            this.PositionX = PositionX;
+            this.PositionY = PositionY;
+            this.SizeX = SizeX;
+            this.SizeY = SizeY;
         }
     }
 }

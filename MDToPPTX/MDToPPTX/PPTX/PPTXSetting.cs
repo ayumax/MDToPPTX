@@ -112,10 +112,16 @@ namespace MDToPPTX.PPTX
 
     public class PPTXSlideMargin
     {
-        public int Left { get; set; } = 1;
-        public int Top { get; set; } = 1;
-        public int Right { get; set; } = 1;
-        public int Bottom { get; set; } = 1;
+        public float Left { get; set; } = 1;
+        public float Top { get; set; } = 1;
+        public float Right { get; set; } = 1;
+        public float Bottom { get; set; } = 1;
+    }
+
+    public class PPTXFont
+    {
+        public string FontFamily { get; set; } = "メイリオ";
+        public float FontSize { get; set; } = 28;
     }
 
     public class PPTXSetting
@@ -126,7 +132,14 @@ namespace MDToPPTX.PPTX
         public string Title { get; set; } = "無題";
         public string SubTitle { get; set; } = "-";
 
+        public float SlideWidth { get; set; } = 25;
         public PPTXSlideMargin Margin { get; set; } = new PPTXSlideMargin();
+
+
+        public PPTXFont Header1font { get; set; } = new PPTXFont() { FontSize = 32 };
+        public PPTXFont Header2font { get; set; } = new PPTXFont() { FontSize = 28 };
+        public PPTXFont NormalFont { get; set; } = new PPTXFont() { FontSize = 24 };
+        public PPTXFont CodeFont { get; set; } = new PPTXFont() { FontSize = 12 };
 
         public PPTXSetting()
         {

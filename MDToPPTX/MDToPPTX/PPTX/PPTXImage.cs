@@ -21,7 +21,7 @@ namespace MDToPPTX.PPTX
             this.ImageFilePath = ImageFilePath;
         }
 
-        public PPTXImage(string ImageFilePath, int PositionX, int PositionY, int SizeX, int SizeY)
+        public PPTXImage(string ImageFilePath, float PositionX, float PositionY, float SizeX, float SizeY)
         {
             this.ImageFilePath = ImageFilePath;
 
