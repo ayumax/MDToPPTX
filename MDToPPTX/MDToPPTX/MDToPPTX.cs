@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Markdig;
+using Markdig.Renderers.Normalize;
+using Markdig.Syntax;
+
 using MDToPPTX.PPTX;
 using MDToPPTX.Markdown;
-using MDToPPTX.Markdown.SyntaxWriter;
+using MDToPPTX.Markdown.Renderers.PPTX;
 
 namespace MDToPPTX
 {
     public class MDToPPTX
     {
-        private Dictionary<Type, SyntaxWriterBase> SyntaxWriter;
-
         public MDToPPTX()
         {
-            SyntaxWriter = new Dictionary<Type, SyntaxWriterBase>();
-            SyntaxWriter.Add(typeof(Markdig.Syntax.HeadingBlock), new HeadingBlockWriter());
-            SyntaxWriter.Add(typeof(Markdig.Syntax.ParagraphBlock), new ParagraphBlockWriter());
-            SyntaxWriter.Add(typeof(Markdig.Syntax.FencedCodeBlock), new FencedCodeBlockWriter());
         }
 
         public void Run(string MarkdownFilePath)
@@ -27,8 +25,6 @@ namespace MDToPPTX
                 markdownText = sr.ReadToEnd();
             }
 
-            var parsedMarkdown = Markdig.Markdown.Parse(markdownText);
-
             var settings = new PPTXSetting()
             {
                 SlideSize = EPPTXSlideSizeValues.Screen4x3,
@@ -36,22 +32,28 @@ namespace MDToPPTX
                 SubTitle = "2018/5/3 ayumax"
             };
 
-            using (PPTXDocument document = new PPTXDocument(MarkdownFilePath.ToLower().Replace(".md", ".pptx"), settings))
-            {
-                var slide = new SlideManager(document, settings);
+            ToPPTX(markdownText, MarkdownFilePath.ToLower().Replace(".md", ".pptx"), settings);
+        }
 
-                foreach (var _markdownItem in parsedMarkdown)
-                {
-                    var _markdownType = _markdownItem.GetType();
-                    if (SyntaxWriter.ContainsKey(_markdownType))
-                    {
-                        SyntaxWriter[_markdownType].Write(_markdownItem, slide);
-                    }
-                }
+        public static MarkdownDocument ToPPTX(string markdown, string pptxFilePath, PPTXSetting options = null, MarkdownPipeline pipeline = null)
+        {
+            pipeline = pipeline ?? new MarkdownPipelineBuilder().Build();
+            //pipeline = Markdig.Markdown.CheckForSelfPipeline(pipeline, markdown); 
+
+            var document = Markdig.Markdown.Parse(markdown, pipeline);
+
+            using (PPTXDocument pptx = new PPTXDocument(pptxFilePath, options))
+            {
+                var slide = new SlideManager(pptx, options);
+
+                // We override the renderer with our own writer
+                var renderer = new PPTXRenderer(slide, options);
+                pipeline.Setup(renderer);
+
+                renderer.Render(document);
             }
 
-        }   
-
-       
+            return document;
+        }
     }
 }

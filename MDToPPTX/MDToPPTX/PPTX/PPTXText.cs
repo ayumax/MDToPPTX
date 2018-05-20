@@ -4,39 +4,55 @@ using System.Text;
 
 namespace MDToPPTX.PPTX
 {
-    public class PPTXText
+    /// <summary>
+    /// テキスト最小単位
+    /// </summary>
+    public class PPTXTextRun
     {
         /// <summary>
         /// 追加されるテキスト
         /// </summary>
         public string Text { get; set; } = "";
+        public PPTXFont Font { get; set; } = new PPTXFont();
+
+    }
+
+    /// <summary>
+    /// テキストエリア内の1行
+    /// </summary>
+    public class PPTXText
+    {
+        /// <summary>
+        /// Texts
+        /// </summary>
+        public List<PPTXTextRun> Texts { get; set; } = new List<PPTXTextRun>();
 
         /// <summary>
         /// 箇条書き設定
         /// </summary>
         public PPTXBullet Bullet { get; set; } = PPTXBullet.None;
 
-        public PPTXFont Font { get; set; } = new PPTXFont();
-
         public PPTXText()
         {
 
         }
 
-        public PPTXText(string Text)
+        public PPTXText(PPTXBullet Bullet)
         {
-            this.Text = Text;
-            this.Bullet = PPTXBullet.None;
+            this.Bullet = Bullet;
         }
 
-        public PPTXText(string Text, PPTXBullet Bullet)
+        public PPTXText(PPTXBullet Bullet, PPTXTextRun Text)
         {
-            this.Text = Text;
-
             this.Bullet = Bullet;
+
+            Texts.Add(Text);
         }
     }
 
+    /// <summary>
+    /// テキストエリア
+    /// </summary>
     public class PPTXTextArea
     {
         /// <summary>
@@ -52,33 +68,6 @@ namespace MDToPPTX.PPTX
         public PPTXTextArea()
         {
 
-        }
-
-        public PPTXTextArea(string Text)
-        {
-            this.Texts = new List<PPTXText>()
-            {
-                new PPTXText(Text)
-            };
-
-            this.Transform = new PPTXTransform();
-        }
-
-        public PPTXTextArea(string Text, float PositionX, float PositionY, float SizeX, float SizeY)
-        {
-            this.Texts = new List<PPTXText>()
-            {
-                new PPTXText(Text)
-            };
-
-            this.Transform = new PPTXTransform()
-            {
-                AutoLayout = false,
-                PositionX = PositionX,
-                PositionY = PositionY,
-                SizeX = SizeX,
-                SizeY = SizeY
-            };
         }
 
         public PPTXTextArea(float PositionX, float PositionY, float SizeX, float SizeY)

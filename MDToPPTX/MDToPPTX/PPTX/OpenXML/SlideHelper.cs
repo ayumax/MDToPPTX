@@ -175,16 +175,18 @@ namespace MDToPPTX.PPTX.OpenXML
 
             foreach (var _textLine in Content.Texts)
             {
-                var paragraphPorp = CrateParagraphProperties(_textLine);
+                var paragraph = new A.Paragraph(CrateParagraphProperties(_textLine));
 
-                shape1.TextBody.Append(
-                    new A.Paragraph(paragraphPorp,
-                                    new A.Run()
-                                    {
-                                        RunProperties = CreateRunProperties(_textLine),
-                                        Text = new A.Text(_textLine.Text)
-                                    })
-                    );
+                foreach(var _textRun in _textLine.Texts)
+                {
+                    paragraph.Append(new A.Run()
+                    {
+                        RunProperties = CreateRunProperties(_textRun),
+                        Text = new A.Text(_textRun.Text)
+                    });
+                }
+                
+                shape1.TextBody.Append(paragraph);
             }
 
             shapeTree1.Append(shape1);
@@ -396,7 +398,7 @@ namespace MDToPPTX.PPTX.OpenXML
             return paragraphPorp;
         }
 
-        private A.RunProperties CreateRunProperties(PPTXText Text)
+        private A.RunProperties CreateRunProperties(PPTXTextRun Text)
         {
             A.RunProperties runProperties3 = new A.RunProperties() { Language = "ja-JP", AlternativeLanguage = "en-US", FontSize = (int)(Text.Font.FontSize * 100), Dirty = false };
             A.LatinFont latinFont1 = new A.LatinFont() { Typeface = Text.Font.FontFamily, Panose = "020B0604030504040204", PitchFamily = 50, CharacterSet = -128 };
