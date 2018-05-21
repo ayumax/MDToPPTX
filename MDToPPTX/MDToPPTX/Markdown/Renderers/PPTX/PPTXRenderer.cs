@@ -213,5 +213,10 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
         {
             Writer.EndTextArea();
         }
+
+        public void AddTextRow(PPTXText TextRow)
+        {
+            Writer.AddTextRow(TextRow);
+        }
     }
 }

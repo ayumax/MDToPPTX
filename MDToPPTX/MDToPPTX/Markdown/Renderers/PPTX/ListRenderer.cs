@@ -1,5 +1,6 @@
 using System.Globalization;
 using Markdig.Syntax;
+using MDToPPTX.PPTX;
 
 namespace MDToPPTX.Markdown.Renderers.PPTX
 {
@@ -29,25 +30,20 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
                 {
                     var item = listBlock[i];
                     var listItem = (ListItemBlock) item;
-                    //renderer.EnsureLine();
 
-                    renderer.Write(index.ToString(CultureInfo.InvariantCulture));
-                    renderer.Write(listBlock.OrderedDelimiter);
-                    renderer.Write(' ');
-                    //renderer.PushIndent(new string(' ', IntLog10Fast(index) + 3));
+                    renderer.AddTextRow(new PPTXText()
+                    {
+                        Bullet = PPTXBullet.Number
+                    });
+
                     renderer.WriteChildren(listItem);
-                    //renderer.PopIndent();
+
                     switch (listBlock.BulletType)
                     {
                         case '1':
                             index++;
                             break;
                     }
-                    //if (i + 1 < listBlock.Count && listBlock.IsLoose)
-                    //{
-                    //    renderer.EnsureLine();
-                    //    renderer.WriteLine();
-                    //}
 
                     renderer.WriteLine();
                 }
@@ -58,17 +54,13 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
                 {
                     var item = listBlock[i];
                     var listItem = (ListItemBlock) item;
-                    //renderer.EnsureLine();
-                    renderer.Write(listBlock.BulletType);
-                    renderer.Write(' ');
-                    //renderer.PushIndent("  ");
+
+                    renderer.AddTextRow(new PPTXText()
+                    {
+                        Bullet = PPTXBullet.Circle
+                    });
+                
                     renderer.WriteChildren(listItem);
-                    //renderer.PopIndent();
-                    //if (i + 1 < listBlock.Count && listBlock.IsLoose)
-                    //{
-                    //    renderer.EnsureLine();
-                    //    renderer.WriteLine();
-                    //}
 
                     renderer.WriteLine();
                 }

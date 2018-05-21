@@ -55,7 +55,7 @@ namespace MDToPPTX.Markdown
             WantReturn = false;
         }
 
-        public void Write(PPTXText Text)
+        public void AddTextRow(PPTXText Text)
         {
             var lastTextArea = AddTextAreaIfEmpty();
 
