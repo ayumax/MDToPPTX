@@ -6,7 +6,7 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
     {
         protected override void Write(PPTXRenderer renderer, HtmlBlock obj)
         {
-            renderer.WriteLeafRawLines(obj, true, false);
+            renderer.WriteLeafRawLines(obj);
         }
     }
 }

@@ -1,11 +1,10 @@
-using System;
-using System.IO;
+using Markdig.Helpers;
+using Markdig.Renderers;
 using Markdig.Syntax;
 using Markdig.Syntax.Inlines;
-using Markdig.Renderers;
-using Markdig.Helpers;
 using MDToPPTX.Markdown.Renderers.PPTX.Inlines;
 using MDToPPTX.PPTX;
+using System;
 
 namespace MDToPPTX.Markdown.Renderers.PPTX
 {
@@ -111,7 +110,7 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
         /// <param name="leafBlock">The leaf block.</param>
         /// <param name="writeEndOfLines">if set to <c>true</c> write end of lines.</param>
         /// <returns>This instance</returns>
-        public PPTXRenderer WriteLeafRawLines(LeafBlock leafBlock, bool writeEndOfLines, bool indent = false)
+        public PPTXRenderer WriteLeafRawLines(LeafBlock leafBlock)
         {
             if (leafBlock == null) throw new ArgumentNullException(nameof(leafBlock));
             if (leafBlock.Lines.Lines != null)
@@ -120,22 +119,9 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
                 var slices = lines.Lines;
                 for (int i = 0; i < lines.Count; i++)
                 {
-                    if (!writeEndOfLines && i > 0)
-                    {
-                        InsertNewPage();
-                    }
-
-                    if (indent)
-                    {
-                        //Write("    ");
-                    }
-
                     Write(ref slices[i].Slice);
 
-                    if (writeEndOfLines)
-                    {
-                        InsertNewPage();
-                    }
+                    WriteReturn();
                 }
             }
             return this;
@@ -199,7 +185,7 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
             return Write(ref slice);
         }
 
-        public void WriteLine()
+        public void WriteReturn()
         {
             Writer.WriteReturn();
         }

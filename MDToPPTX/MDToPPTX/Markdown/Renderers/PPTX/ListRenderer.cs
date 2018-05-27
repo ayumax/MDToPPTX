@@ -25,7 +25,7 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
 
                 renderer.WriteChildren(listItem);
 
-                renderer.WriteLine();
+                renderer.WriteReturn();
             }
 
             renderer.FinishBlock();

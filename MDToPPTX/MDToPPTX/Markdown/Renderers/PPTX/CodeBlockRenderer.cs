@@ -11,29 +11,13 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
 
         protected override void Write(PPTXRenderer renderer, CodeBlock obj)
         {
-            var fencedCodeBlock = obj as FencedCodeBlock;
-            if (fencedCodeBlock != null)
-            {
-                var opening = new string(fencedCodeBlock.FencedChar, fencedCodeBlock.FencedCharCount);
-                renderer.Write(opening);
-                if (fencedCodeBlock.Info != null)
-                {
-                    renderer.Write(fencedCodeBlock.Info);
-                }
-                if (!string.IsNullOrEmpty(fencedCodeBlock.Arguments))
-                {
-                    renderer.Write(" ").Write(fencedCodeBlock.Arguments);
-                }
+            renderer.StartNewArea();
 
-                renderer.WriteLine();
+            renderer.PushFont(renderer.Options.CodeFont);
+            renderer.WriteLeafRawLines(obj);
+            renderer.PopFont();
 
-                renderer.WriteLeafRawLines(obj, true);
-                renderer.Write(opening);
-            }
-            else
-            {
-                renderer.WriteLeafRawLines(obj, false, true);
-            }
+            renderer.FinishBlock();
 
             renderer.FinishBlock();
         }

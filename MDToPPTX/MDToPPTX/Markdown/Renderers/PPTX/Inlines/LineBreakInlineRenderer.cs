@@ -18,7 +18,7 @@ namespace MDToPPTX.Markdown.Renderers.PPTX.Inlines
             {
                 renderer.Write(obj.IsBackslash ? "\\" : "  ");
             }
-            renderer.WriteLine();
+            renderer.WriteReturn();
         }
     }
 }
