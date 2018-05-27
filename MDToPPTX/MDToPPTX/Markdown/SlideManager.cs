@@ -31,6 +31,8 @@ namespace MDToPPTX.Markdown
             currentSlide = new PPTXSlide() { SlideLayout = Settings.SlideLayouts[EPPTXSlideLayoutType.BlankSheet] };
             document.Slides.Add(currentSlide);
 
+            WantReturn = false;
+
             return currentSlide;
         }
 
