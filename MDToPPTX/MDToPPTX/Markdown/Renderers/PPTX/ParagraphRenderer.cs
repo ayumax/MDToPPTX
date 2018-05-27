@@ -9,8 +9,22 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
     {
         protected override void Write(PPTXRenderer renderer, ParagraphBlock obj)
         {
+            // TopŠK‘w‚Ì‚Ì‚İƒGƒŠƒA‚ğV‹K‚Åì¬
+            if (obj.Parent is MarkdownDocument)
+            {
+                renderer.StartTextArea();
+            }
+
+            renderer.PushFont(renderer.Options.NormalFont);
+
             renderer.WriteLeafInline(obj);
-            renderer.FinishBlock();
+
+            renderer.PopFont();
+
+            if (obj.Parent is MarkdownDocument)
+            {
+                renderer.EndTextArea();
+            }
         }
     }
 }

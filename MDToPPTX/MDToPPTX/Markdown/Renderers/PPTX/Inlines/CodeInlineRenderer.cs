@@ -9,11 +9,7 @@ namespace MDToPPTX.Markdown.Renderers.PPTX.Inlines
     {
         protected override void Write(PPTXRenderer renderer, CodeInline obj)
         {
-            var delimiter = obj.Content.Contains(obj.Delimiter + "") ? new string(obj.Delimiter, 2) : obj.Delimiter + "";
-
-            renderer.Write(delimiter);
             renderer.Write(obj.Content);
-            renderer.Write(delimiter);
         }
     }
 }

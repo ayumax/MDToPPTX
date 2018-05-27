@@ -43,6 +43,12 @@ namespace MDToPPTX.Markdown
         {
             var lastTextArea = AddTextAreaIfEmpty();
 
+            if (lastTextArea.Transform.SizeY != 0)
+            {
+                AddTextArea();
+                lastTextArea = currentSlide.TextAreas.LastOrDefault();
+            }
+
             if (lastTextArea.Texts.Count == 0)
             {
                 lastTextArea.Texts.Add(new PPTXText());
@@ -81,9 +87,14 @@ namespace MDToPPTX.Markdown
 
         public void AddTextArea()
         {
-            var lastTextArea = AddTextAreaIfEmpty();
+            WantReturn = false;
 
-            currentSlide.TextAreas.Add(new PPTXTextArea(Settings.Margin.Left, lastTextArea.Transform.PositionY + lastTextArea.Transform.SizeY, PageWidth, 0));
+            var lastTextArea = currentSlide.TextAreas.LastOrDefault();
+
+            currentSlide.TextAreas.Add(new PPTXTextArea(Settings.Margin.Left,
+                lastTextArea == null ? 0 : lastTextArea.Transform.PositionY + lastTextArea.Transform.SizeY,
+                PageWidth,
+                0));
         }
 
         public void EndTextArea()
@@ -98,13 +109,15 @@ namespace MDToPPTX.Markdown
 
                 foreach (var _textRun in _text.Texts)
                 {
-                    maxFontHeight = Math.Max(maxFontHeight, FontHeght(_textRun.Font) * 1.5f);
+                    maxFontHeight = Math.Max(maxFontHeight, FontHeght(_textRun.Font) + 0.5f);
                 }
 
                 lastTextAreaSize += maxFontHeight;
             }
 
             lastTextArea.Transform.SizeY = lastTextAreaSize;
+
+            WantReturn = false;
         }
 
         public void PushFont(PPTXFont Font)

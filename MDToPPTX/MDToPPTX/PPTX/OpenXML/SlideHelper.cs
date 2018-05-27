@@ -43,7 +43,10 @@ namespace MDToPPTX.PPTX.OpenXML
             uint bodyIndex = 1;
             foreach(var bodyContent in SlideContent.TextAreas)
             {
-                AddContent(shapeTree, objectID++, bodyContent, PlaceholderValues.Body, bodyIndex++);
+                if (bodyContent.Texts.Count > 0)
+                {
+                    AddContent(shapeTree, objectID++, bodyContent, PlaceholderValues.Body, bodyIndex++);
+                }
             }
 
             CreateImageMap(slidePart1);

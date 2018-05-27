@@ -11,7 +11,7 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
     {
         protected override void Write(PPTXRenderer renderer, ListBlock listBlock)
         {
-            renderer.StartNewArea();
+            renderer.StartTextArea();
 
             for (var i = 0; i < listBlock.Count; i++)
             {
@@ -28,7 +28,7 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
                 renderer.WriteReturn();
             }
 
-            renderer.FinishBlock();
+            renderer.EndTextArea();
         }
 
     }

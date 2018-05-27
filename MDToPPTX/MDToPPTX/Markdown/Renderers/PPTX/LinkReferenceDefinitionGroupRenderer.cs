@@ -6,9 +6,9 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
     {
         protected override void Write(PPTXRenderer renderer, LinkReferenceDefinitionGroup obj)
         {
-            //renderer.EnsureLine();
+            renderer.StartTextArea();
             renderer.WriteChildren(obj);
-            renderer.FinishBlock();
+            renderer.EndTextArea();
         }
     }
 }

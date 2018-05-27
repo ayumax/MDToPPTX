@@ -6,7 +6,7 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
     {
         protected override void Write(PPTXRenderer renderer, LinkReferenceDefinition linkDef)
         {
-            //renderer.EnsureLine();
+            renderer.StartTextArea();
             renderer.Write('[');            
             renderer.Write(linkDef.Label);
             renderer.Write("]: ");
@@ -19,7 +19,7 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
                 renderer.Write(linkDef.Title.Replace("\"", "\\\""));
                 renderer.Write('"');
             }
-            renderer.FinishBlock();
+            renderer.EndTextArea();
         }
     }
 }

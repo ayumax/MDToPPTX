@@ -9,7 +9,6 @@ namespace MDToPPTX.Markdown.Renderers.PPTX.Inlines
     {
         protected override void Write(PPTXRenderer renderer, DelimiterInline obj)
         {
-            renderer.Write(obj.ToLiteral());
             renderer.WriteChildren(obj);
         }
     }

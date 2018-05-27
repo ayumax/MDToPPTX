@@ -11,15 +11,13 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
 
         protected override void Write(PPTXRenderer renderer, CodeBlock obj)
         {
-            renderer.StartNewArea();
+            renderer.StartTextArea();
 
             renderer.PushFont(renderer.Options.CodeFont);
             renderer.WriteLeafRawLines(obj);
             renderer.PopFont();
 
-            renderer.FinishBlock();
-
-            renderer.FinishBlock();
+            renderer.EndTextArea();
         }
     }
 }

@@ -9,6 +9,8 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
     {
         protected override void Write(PPTXRenderer renderer, HeadingBlock obj)
         {
+            renderer.StartTextArea();
+
             var setFont = renderer.Options.NormalFont;
             switch (obj.Level)
             {
@@ -24,7 +26,7 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
             renderer.WriteLeafInline(obj);
             renderer.PopFont();
 
-            renderer.FinishBlock();
+            renderer.EndTextArea();
         }
     }
 }
