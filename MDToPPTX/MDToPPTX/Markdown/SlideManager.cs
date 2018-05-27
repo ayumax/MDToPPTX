@@ -18,6 +18,8 @@ namespace MDToPPTX.Markdown
 
         private bool WantReturn = false;
 
+        private Stack<PPTXFont> FontStack = new Stack<PPTXFont>();
+
         public SlideManager(PPTXDocument document, PPTXSetting Settings)
         {
             this.document = document;
@@ -32,6 +34,7 @@ namespace MDToPPTX.Markdown
             document.Slides.Add(currentSlide);
 
             WantReturn = false;
+            FontStack.Clear();
 
             return currentSlide;
         }
@@ -50,6 +53,11 @@ namespace MDToPPTX.Markdown
             {
                 lastText = new PPTXText();
                 lastTextArea.Texts.Add(lastText);
+            }
+
+            if (FontStack.Count > 0)
+            {
+                Text.Font = FontStack.Peek();
             }
 
             lastText.Texts.Add(Text);
@@ -84,11 +92,11 @@ namespace MDToPPTX.Markdown
 
             var lastTextAreaSize = 0.0f;
 
-            foreach(var _text in lastTextArea.Texts)
+            foreach (var _text in lastTextArea.Texts)
             {
                 float maxFontHeight = 0;
-                
-                foreach(var _textRun in _text.Texts)
+
+                foreach (var _textRun in _text.Texts)
                 {
                     maxFontHeight = Math.Max(maxFontHeight, FontHeght(_textRun.Font) * 1.5f);
                 }
@@ -99,7 +107,15 @@ namespace MDToPPTX.Markdown
             lastTextArea.Transform.SizeY = lastTextAreaSize;
         }
 
+        public void PushFont(PPTXFont Font)
+        {
+            FontStack.Push(Font);
+        }
 
+        public void PopFont()
+        {
+            FontStack.Pop();
+        }
 
         private PPTXTextArea AddTextAreaIfEmpty()
         {

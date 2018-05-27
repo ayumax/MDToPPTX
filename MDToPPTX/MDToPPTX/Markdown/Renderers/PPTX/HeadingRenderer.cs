@@ -7,23 +7,22 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
     /// </summary>
     public class HeadingRenderer : PPTXObjectRenderer<HeadingBlock>
     {
-        private static readonly string[] HeadingTexts = {
-            "#",
-            "##",
-            "###",
-            "####",
-            "#####",
-            "######",
-        };
-
         protected override void Write(PPTXRenderer renderer, HeadingBlock obj)
         {
-            var headingText = obj.Level > 0 && obj.Level <= 6
-                ? HeadingTexts[obj.Level - 1]
-                : new string('#', obj.Level);
+            var setFont = renderer.Options.NormalFont;
+            switch (obj.Level)
+            {
+                case 1:
+                    setFont = renderer.Options.Header1font;
+                    break;
+                case 2:
+                    setFont = renderer.Options.Header2font;
+                    break;
+            }
 
-            renderer.Write(headingText);
+            renderer.PushFont(setFont);
             renderer.WriteLeafInline(obj);
+            renderer.PopFont();
 
             renderer.FinishBlock();
         }

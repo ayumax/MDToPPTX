@@ -218,5 +218,15 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
         {
             Writer.AddTextRow(TextRow);
         }
+
+        public void PushFont(PPTXFont Font)
+        {
+            Writer.PushFont(Font);
+        }
+
+        public void PopFont()
+        {
+            Writer.PopFont();
+        }
     }
 }
