@@ -45,7 +45,7 @@ namespace MDToPPTX.PPTX.OpenXML
             {
                 if (bodyContent.Texts.Count > 0)
                 {
-                    AddContent(shapeTree, objectID++, bodyContent, PlaceholderValues.Body, bodyIndex++);
+                    AddTextBox(shapeTree, objectID++, bodyContent, PlaceholderValues.Body, bodyIndex++);
                 }
             }
 
@@ -140,7 +140,7 @@ namespace MDToPPTX.PPTX.OpenXML
 
             NonVisualDrawingProperties nonVisualDrawingProperties2 = new NonVisualDrawingProperties() { Id = ObjectID, Name = $"Content{ObjectID}" };
 
-            NonVisualShapeDrawingProperties nonVisualShapeDrawingProperties1 = new NonVisualShapeDrawingProperties();
+            NonVisualShapeDrawingProperties nonVisualShapeDrawingProperties1 = new NonVisualShapeDrawingProperties() { TextBox = true};
             A.ShapeLocks shapeLocks1 = new A.ShapeLocks() { NoGrouping = true };
 
             nonVisualShapeDrawingProperties1.Append(shapeLocks1);
@@ -158,6 +158,19 @@ namespace MDToPPTX.PPTX.OpenXML
             nonVisualShapeProperties1.Append(nonVisualShapeDrawingProperties1);
             nonVisualShapeProperties1.Append(applicationNonVisualDrawingProperties2);
             ShapeProperties shapeProperties1 = new ShapeProperties();
+
+            A.SolidFill solidFill1 = new A.SolidFill();
+
+            A.SchemeColor schemeColor1 = new A.SchemeColor() { Val = A.SchemeColorValues.Accent1 };
+            A.LuminanceModulation luminanceModulation1 = new A.LuminanceModulation() { Val = 20000 };
+            A.LuminanceOffset luminanceOffset1 = new A.LuminanceOffset() { Val = 80000 };
+
+            schemeColor1.Append(luminanceModulation1);
+            schemeColor1.Append(luminanceOffset1);
+
+            solidFill1.Append(schemeColor1);
+
+            shapeProperties1.Append(solidFill1);
 
             TextBody textBody1 = new TextBody();
             A.BodyProperties bodyProperties1 = new A.BodyProperties();
@@ -194,7 +207,87 @@ namespace MDToPPTX.PPTX.OpenXML
 
             shapeTree1.Append(shape1);
         }
-        
+
+
+        private void AddTextBox(ShapeTree shapeTree1, uint ObjectID, PPTXTextArea Content, PlaceholderValues PlaceHolderType, uint PlaceHolderIndex = uint.MaxValue)
+        {
+            Shape shape1 = new Shape();
+
+            NonVisualShapeProperties nonVisualShapeProperties1 = new NonVisualShapeProperties();
+
+            NonVisualDrawingProperties nonVisualDrawingProperties2 = new NonVisualDrawingProperties() { Id = ObjectID, Name = $"Content{ObjectID}" };
+
+            A.NonVisualDrawingPropertiesExtensionList nonVisualDrawingPropertiesExtensionList1 = new A.NonVisualDrawingPropertiesExtensionList();
+
+            A.NonVisualDrawingPropertiesExtension nonVisualDrawingPropertiesExtension1 = new A.NonVisualDrawingPropertiesExtension() { Uri = "{FF2B5EF4-FFF2-40B4-BE49-F238E27FC236}" };
+
+            OpenXmlUnknownElement openXmlUnknownElement1 = OpenXmlUnknownElement.CreateOpenXmlUnknownElement("<a16:creationId xmlns:a16=\"http://schemas.microsoft.com/office/drawing/2014/main\" id=\"{5FE2CA47-E73A-450F-9AE0-DF438874E2FB}\" />");
+
+            nonVisualDrawingPropertiesExtension1.Append(openXmlUnknownElement1);
+
+            nonVisualDrawingPropertiesExtensionList1.Append(nonVisualDrawingPropertiesExtension1);
+
+            nonVisualDrawingProperties2.Append(nonVisualDrawingPropertiesExtensionList1);
+            NonVisualShapeDrawingProperties nonVisualShapeDrawingProperties1 = new NonVisualShapeDrawingProperties() { TextBox = true };
+            ApplicationNonVisualDrawingProperties applicationNonVisualDrawingProperties2 = new ApplicationNonVisualDrawingProperties();
+
+            nonVisualShapeProperties1.Append(nonVisualDrawingProperties2);
+            nonVisualShapeProperties1.Append(nonVisualShapeDrawingProperties1);
+            nonVisualShapeProperties1.Append(applicationNonVisualDrawingProperties2);
+
+            ShapeProperties shapeProperties1 = new ShapeProperties();
+
+
+            A.PresetGeometry presetGeometry1 = new A.PresetGeometry() { Preset = A.ShapeTypeValues.Rectangle };
+            A.AdjustValueList adjustValueList1 = new A.AdjustValueList();
+
+            presetGeometry1.Append(adjustValueList1);
+
+            A.SolidFill solidFill1 = new A.SolidFill();
+
+            A.RgbColorModelHex rgbColorModelHex1 = new A.RgbColorModelHex() { Val = "FF0000" };
+
+            solidFill1.Append(rgbColorModelHex1);
+
+            TextBody textBody1 = new TextBody();
+            A.BodyProperties bodyProperties1 = new A.BodyProperties();
+            A.ListStyle listStyle1 = new A.ListStyle();
+
+            textBody1.Append(bodyProperties1);
+            textBody1.Append(listStyle1);
+
+            A.Transform2D transform2D25 = CreateTransform2D(Content.Transform);
+            if (transform2D25 != null)
+            {
+                shapeProperties1.Append(transform2D25);
+            }
+
+            shapeProperties1.Append(presetGeometry1);
+            shapeProperties1.Append(solidFill1);
+
+            shape1.Append(nonVisualShapeProperties1);
+            shape1.Append(shapeProperties1);
+            shape1.Append(textBody1);
+
+            foreach (var _textLine in Content.Texts)
+            {
+                var paragraph = new A.Paragraph(CrateParagraphProperties(_textLine));
+
+                foreach (var _textRun in _textLine.Texts)
+                {
+                    paragraph.Append(new A.Run()
+                    {
+                        RunProperties = CreateRunProperties(_textRun),
+                        Text = new A.Text(_textRun.Text)
+                    });
+                }
+
+                shape1.TextBody.Append(paragraph);
+            }
+
+            shapeTree1.Append(shape1);
+        }
+
         private void AddImageContent(ShapeTree shapeTree1, uint ObjectID, PPTXImage Content, PlaceholderValues PlaceHolderType, uint PlaceHolderIndex = uint.MaxValue)
         {
             Picture picture1 = new Picture();
