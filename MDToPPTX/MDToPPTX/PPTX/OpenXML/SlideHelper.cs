@@ -243,12 +243,6 @@ namespace MDToPPTX.PPTX.OpenXML
 
             presetGeometry1.Append(adjustValueList1);
 
-            A.SolidFill solidFill1 = new A.SolidFill();
-
-            A.RgbColorModelHex rgbColorModelHex1 = new A.RgbColorModelHex() { Val = "FF0000" };
-
-            solidFill1.Append(rgbColorModelHex1);
-
             TextBody textBody1 = new TextBody();
             A.BodyProperties bodyProperties1 = new A.BodyProperties();
             A.ListStyle listStyle1 = new A.ListStyle();
@@ -263,7 +257,14 @@ namespace MDToPPTX.PPTX.OpenXML
             }
 
             shapeProperties1.Append(presetGeometry1);
-            shapeProperties1.Append(solidFill1);
+
+            if (Content.BackgroundColor.IsTransparent == false)
+            {
+                A.SolidFill solidFill1 = new A.SolidFill();
+                solidFill1.Append(CreateRGBColorModeHex(Content.BackgroundColor));
+                shapeProperties1.Append(solidFill1);
+            }
+
 
             shape1.Append(nonVisualShapeProperties1);
             shape1.Append(shapeProperties1);
@@ -441,7 +442,9 @@ namespace MDToPPTX.PPTX.OpenXML
         {
             var paragraphPorp = new A.ParagraphProperties();
 
-            switch(Content.Bullet)
+            //paragraphPorp.LineSpacing = new A.LineSpacing() { SpacingPercent = new A.SpacingPercent() { Val = 110000 } };
+
+            switch (Content.Bullet)
             {
                 case PPTXBullet.None:
                     paragraphPorp.Append(new A.NoBullet());
@@ -503,8 +506,15 @@ namespace MDToPPTX.PPTX.OpenXML
             runProperties3.Append(latinFont1);
             runProperties3.Append(eastAsianFont1);
 
+            if (Text.ForegroundColor.IsTransparent == false)
+            {
+                runProperties3.Append(CreateRGBColorModeHex(Text.ForegroundColor));
+            }
+
             return runProperties3;
         }
+
+        private A.RgbColorModelHex CreateRGBColorModeHex(PPTXColor Color) => new A.RgbColorModelHex() { Val = $"{Color.Color.R:X02}{Color.Color.G:X02}{Color.Color.B:X02}" };
     }
 
 }

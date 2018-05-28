@@ -14,7 +14,7 @@ namespace MDToPPTX.PPTX
         /// </summary>
         public string Text { get; set; } = "";
         public PPTXFont Font { get; set; } = new PPTXFont();
-
+        public PPTXColor ForegroundColor { get; set; } = new PPTXColor() { Color = System.Drawing.Color.Black };
     }
 
     /// <summary>
@@ -64,6 +64,8 @@ namespace MDToPPTX.PPTX
         /// 箇条書き設定
         /// </summary>
         public List<PPTXText> Texts { get; set; } = new List<PPTXText>();
+
+        public PPTXColor BackgroundColor { get; set; } = new PPTXColor() { Color = System.Drawing.Color.Transparent };
 
         public PPTXTextArea()
         {

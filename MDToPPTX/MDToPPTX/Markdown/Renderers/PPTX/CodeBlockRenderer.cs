@@ -1,4 +1,5 @@
 using Markdig.Syntax;
+using MDToPPTX.PPTX;
 
 namespace MDToPPTX.Markdown.Renderers.PPTX
 {
@@ -11,10 +12,16 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
 
         protected override void Write(PPTXRenderer renderer, CodeBlock obj)
         {
-            renderer.StartTextArea();
+            var myArea = renderer.StartTextArea();
+            myArea.BackgroundColor = new PPTXColor(240, 240, 240);
 
             renderer.PushFont(renderer.Options.CodeFont);
+            renderer.Write(" ");
+            renderer.WriteReturn();
             renderer.WriteLeafRawLines(obj);
+            renderer.WriteReturn();
+            renderer.Write(" ");
+           
             renderer.PopFont();
 
             renderer.EndTextArea();

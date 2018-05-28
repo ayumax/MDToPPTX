@@ -190,9 +190,9 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
             Writer.WriteReturn();
         }
 
-        public void StartTextArea()
+        public PPTXTextArea StartTextArea()
         {
-            Writer.AddTextArea();
+            return Writer.AddTextArea();
         }
 
         public void EndTextArea()
