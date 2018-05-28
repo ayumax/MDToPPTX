@@ -14,7 +14,7 @@ namespace MDToPPTX.PPTX
         /// </summary>
         public string Text { get; set; } = "";
         public PPTXFont Font { get; set; } = new PPTXFont();
-        public PPTXColor ForegroundColor { get; set; } = new PPTXColor() { Color = System.Drawing.Color.Black };
+        public PPTXLink Link { get; set; }
     }
 
     /// <summary>

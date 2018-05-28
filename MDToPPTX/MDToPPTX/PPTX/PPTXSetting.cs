@@ -122,6 +122,7 @@ namespace MDToPPTX.PPTX
     {
         public string FontFamily { get; set; } = "メイリオ";
         public float FontSize { get; set; } = 28;
+        public PPTXColor ForegroundColor { get; set; } = new PPTXColor(System.Drawing.Color.Black);
     }
 
     public class PPTXSetting
@@ -136,12 +137,13 @@ namespace MDToPPTX.PPTX
         public PPTXSlideMargin Margin { get; set; } = new PPTXSlideMargin();
 
 
-        public PPTXFont Header1font { get; set; } = new PPTXFont() { FontSize = 32 };
+        public PPTXFont Header1font { get; set; } = new PPTXFont() { FontSize = 32, ForegroundColor = new PPTXColor(0, 0, 0) };
         public PPTXFont Header2font { get; set; } = new PPTXFont() { FontSize = 28 };
         public PPTXFont NormalFont { get; set; } = new PPTXFont() { FontSize = 24 };
         public PPTXFont CodeFont { get; set; } = new PPTXFont() { FontSize = 12 };
+        public PPTXFont InlineCodeFont { get; set; } = new PPTXFont() { FontSize = 24, ForegroundColor = new PPTXColor(204, 51, 0) };
 
-        public float TextAreaMarginHeight { get; set; } = 0.5f;
+        public float TextAreaMarginHeight { get; set; } = 0.3f;
 
         public PPTXSetting()
         {

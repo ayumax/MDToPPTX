@@ -9,7 +9,9 @@ namespace MDToPPTX.Markdown.Renderers.PPTX.Inlines
     {
         protected override void Write(PPTXRenderer renderer, CodeInline obj)
         {
+            renderer.PushFont(renderer.Options.InlineCodeFont);
             renderer.Write(obj.Content);
+            renderer.PopFont();
         }
     }
 }

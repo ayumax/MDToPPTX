@@ -499,18 +499,21 @@ namespace MDToPPTX.PPTX.OpenXML
 
         private A.RunProperties CreateRunProperties(PPTXTextRun Text)
         {
-            A.RunProperties runProperties3 = new A.RunProperties() { Language = "ja-JP", AlternativeLanguage = "en-US", FontSize = (int)(Text.Font.FontSize * 100), Dirty = false };
+            A.RunProperties runProperties3 = new A.RunProperties() { Kumimoji = true, Language = "ja-JP", AlternativeLanguage = "en-US", FontSize = (int)(Text.Font.FontSize * 100), Dirty = false };
             A.LatinFont latinFont1 = new A.LatinFont() { Typeface = Text.Font.FontFamily, Panose = "020B0604030504040204", PitchFamily = 50, CharacterSet = -128 };
             A.EastAsianFont eastAsianFont1 = new A.EastAsianFont() { Typeface = Text.Font.FontFamily, Panose = "020B0604030504040204", PitchFamily = 50, CharacterSet = -128 };
+
+            if (Text.Font.ForegroundColor.IsTransparent == false)
+            {
+                A.SolidFill solidFill1 = new A.SolidFill();
+                solidFill1.Append(CreateRGBColorModeHex(Text.Font.ForegroundColor));
+                runProperties3.Append(solidFill1);
+            }
 
             runProperties3.Append(latinFont1);
             runProperties3.Append(eastAsianFont1);
 
-            if (Text.ForegroundColor.IsTransparent == false)
-            {
-                runProperties3.Append(CreateRGBColorModeHex(Text.ForegroundColor));
-            }
-
+           
             return runProperties3;
         }
 

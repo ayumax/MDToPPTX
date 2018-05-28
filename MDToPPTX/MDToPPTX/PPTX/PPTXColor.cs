@@ -19,6 +19,11 @@ namespace MDToPPTX.PPTX
             Color = Color.FromArgb(Alpha, Red, Green, Blue);
         }
 
+        public PPTXColor(Color Color)
+        {
+            this.Color = Color;
+        }
+
         public bool IsTransparent => Color == Color.Transparent || Color.A == 0;
     }
 }
