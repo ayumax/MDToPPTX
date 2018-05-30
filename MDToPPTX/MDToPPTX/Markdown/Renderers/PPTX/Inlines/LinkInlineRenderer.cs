@@ -1,4 +1,5 @@
 using Markdig.Syntax.Inlines;
+using MDToPPTX.PPTX;
 
 namespace MDToPPTX.Markdown.Renderers.PPTX.Inlines
 {
@@ -11,46 +12,53 @@ namespace MDToPPTX.Markdown.Renderers.PPTX.Inlines
         {
             if (link.IsImage)
             {
-                renderer.Write('!');
+                renderer.EndTextArea();
+
+                WriteImageLink(renderer, link);
             }
-            renderer.Write('[');
-            renderer.WriteChildren(link);
-            renderer.Write(']');
+            else
+            {
+                WriteHyperLink(renderer, link);
+            }
+        }
+
+        private void WriteImageLink(PPTXRenderer renderer, LinkInline link)
+        {
+            renderer.WriteImage(new PPTXImage(link.Url)
+            {
+                Transform = new PPTXTransform(renderer.Options.Margin.Left, 0, 5, 3)
+            });
+        }
+
+        private void WriteHyperLink(PPTXRenderer renderer, LinkInline link)
+        {
+            renderer.PushHyperLink(new PPTXLink()
+            {
+                LinkKey = link.Url,
+                LinkURL = link.Url
+            });
 
             if (link.Label != null)
             {
-
                 var literal = link.FirstChild as LiteralInline;
                 if (literal != null && literal.Content.Match(link.Label) && literal.Content.Length == link.Label.Length)
                 {
-                    // collapsed reference and shortcut links
-                    if (!link.IsShortcut)
-                    {
-                        renderer.Write("[]");
-                    }
                 }
                 else
                 {
                     // full link
-                    renderer.Write('[').Write(link.Label).Write(']');
+                    renderer.Write(link.Label);
                 }
             }
             else
             {
                 if (!string.IsNullOrEmpty(link.Url))
                 {
-                    renderer.Write('(').Write(link.Url);
-
-                    if (!string.IsNullOrEmpty(link.Title))
-                    {
-                        renderer.Write(" \"");
-                        renderer.Write(link.Title.Replace(@"""", @"\"""));
-                        renderer.Write("\"");
-                    }
-
-                    renderer.Write(')');
+                    renderer.WriteChildren(link);    
                 }
             }
+
+            renderer.PopHyperLink();
         }
     }
 }

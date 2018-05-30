@@ -185,6 +185,11 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
             return Write(ref slice);
         }
 
+        public void WriteImage(PPTXImage Image)
+        {
+            Writer.WriteImage(Image);
+        }
+
         public void WriteReturn()
         {
             Writer.WriteReturn();
@@ -213,6 +218,16 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
         public void PopFont()
         {
             Writer.PopFont();
+        }
+
+        public void PushHyperLink(PPTXLink Link)
+        {
+            Writer.PushHyperLink(Link);
+        }
+
+        public void PopHyperLink()
+        {
+            Writer.PopHyperLink();
         }
     }
 }

@@ -8,5 +8,7 @@ namespace MDToPPTX.PPTX
     {
         public string LinkKey { get; set; } = "";
         public string LinkURL { get; set; } = "";
+
+        public bool IsEnable => !string.IsNullOrWhiteSpace(LinkKey) && !string.IsNullOrWhiteSpace(LinkURL);
     }
 }

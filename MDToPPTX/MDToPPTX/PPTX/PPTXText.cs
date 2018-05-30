@@ -14,7 +14,7 @@ namespace MDToPPTX.PPTX
         /// </summary>
         public string Text { get; set; } = "";
         public PPTXFont Font { get; set; } = new PPTXFont();
-        public PPTXLink Link { get; set; }
+        public PPTXLink Link { get; set; } = new PPTXLink();
     }
 
     /// <summary>

@@ -19,6 +19,9 @@ namespace MDToPPTX.Markdown
         private bool WantReturn = false;
 
         private Stack<PPTXFont> FontStack = new Stack<PPTXFont>();
+        private Stack<PPTXLink> LinkStack = new Stack<PPTXLink>();
+
+        private PPTXTransform LastAddedItemTransform = new PPTXTransform();
 
         public SlideManager(PPTXDocument document, PPTXSetting Settings)
         {
@@ -35,6 +38,7 @@ namespace MDToPPTX.Markdown
 
             WantReturn = false;
             FontStack.Clear();
+            LastAddedItemTransform = new PPTXTransform();
 
             return currentSlide;
         }
@@ -43,10 +47,10 @@ namespace MDToPPTX.Markdown
         {
             var lastTextArea = AddTextAreaIfEmpty();
 
-            if (lastTextArea.Transform.SizeY != 0)
+            if (currentSlide.TextAreas.Last().Transform.SizeY > 0)
             {
                 AddTextArea();
-                lastTextArea = currentSlide.TextAreas.LastOrDefault();
+                lastTextArea = currentSlide.TextAreas.Last();
             }
 
             if (lastTextArea.Texts.Count == 0)
@@ -64,6 +68,11 @@ namespace MDToPPTX.Markdown
             if (FontStack.Count > 0)
             {
                 Text.Font = FontStack.Peek();
+            }
+
+            if (LinkStack.Count > 0)
+            {
+                Text.Link = LinkStack.Peek();
             }
 
             lastText.Texts.Add(Text);
@@ -89,12 +98,11 @@ namespace MDToPPTX.Markdown
         {
             WantReturn = false;
 
-            var lastTextArea = currentSlide.TextAreas.LastOrDefault();
-
             currentSlide.TextAreas.Add(new PPTXTextArea(Settings.Margin.Left,
-                lastTextArea == null ? 0 : lastTextArea.Transform.PositionY + lastTextArea.Transform.SizeY + Settings.TextAreaMarginHeight,
+                LastAddedItemTransform.PositionY + LastAddedItemTransform.SizeY + Settings.TextAreaMarginHeight,
                 PageWidth,
                 0));
+
 
             return currentSlide.TextAreas.Last();
         }
@@ -119,6 +127,7 @@ namespace MDToPPTX.Markdown
             }
 
             lastTextArea.Transform.SizeY = lastTextAreaSize;
+            LastAddedItemTransform = lastTextArea.Transform;
 
             WantReturn = false;
         }
@@ -137,10 +146,31 @@ namespace MDToPPTX.Markdown
         {
             if (currentSlide.TextAreas.Count == 0)
             {
-                currentSlide.TextAreas.Add(new PPTXTextArea(Settings.Margin.Left, Settings.Margin.Top, PageWidth, 0));
+                AddTextArea();
             }
 
             return currentSlide.TextAreas.Last();
+        }
+
+        public void PushHyperLink(PPTXLink Link)
+        {
+            LinkStack.Push(Link);
+        }
+
+        public void PopHyperLink()
+        {
+            LinkStack.Pop();
+        }
+
+        public void WriteImage(PPTXImage Image)
+        {
+            WantReturn = false;
+
+            Image.Transform.PositionY = LastAddedItemTransform.PositionY + LastAddedItemTransform.SizeY + Settings.TextAreaMarginHeight;
+
+            currentSlide.Images.Add(Image);
+
+            LastAddedItemTransform = Image.Transform;
         }
     }
 }
