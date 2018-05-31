@@ -5,7 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DocumentFormat.OpenXml" Version="2.8.1" />
+    <PackageReference Include="CoreCompat.System.Drawing.v2" Version="5.2.0-preview1-r131" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.9.0-ci0082" />
     <PackageReference Include="Markdig" Version="0.15.0" />
   </ItemGroup>
 

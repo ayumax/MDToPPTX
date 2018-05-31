@@ -16,12 +16,19 @@ namespace MDToPPTX.Markdown
         public float FontHeght(PPTXFont Font) => 0.35278f / 10.0f * Font.FontSize;
         public float PageWidth => Settings.SlideWidth - (Settings.Margin.Left + Settings.Margin.Right);
 
-        private bool WantReturn = false;
 
-        private Stack<PPTXFont> FontStack = new Stack<PPTXFont>();
-        private Stack<PPTXLink> LinkStack = new Stack<PPTXLink>();
+        public Stack<PPTXFont> FontStack { get; private set;} = new Stack<PPTXFont>();
+        public Stack<PPTXLink> LinkStack { get; private set; } = new Stack<PPTXLink>();
 
-        private PPTXTransform LastAddedItemTransform = new PPTXTransform();
+        public PPTXTransform LastAddedItemTransform = new PPTXTransform();
+
+        private SlideTextManager TextManager = new SlideTextManager();
+        private SlideTableManager TableManager = new SlideTableManager();
+
+        public PPTXTransform NewTransform => new PPTXTransform(Settings.Margin.Left,
+                LastAddedItemTransform.PositionY + LastAddedItemTransform.SizeY,
+                PageWidth,
+                0);
 
         public SlideManager(PPTXDocument document, PPTXSetting Settings)
         {
@@ -36,100 +43,45 @@ namespace MDToPPTX.Markdown
             currentSlide = new PPTXSlide() { SlideLayout = Settings.SlideLayouts[EPPTXSlideLayoutType.BlankSheet] };
             document.Slides.Add(currentSlide);
 
-            WantReturn = false;
             FontStack.Clear();
             LastAddedItemTransform = new PPTXTransform();
+
+            TextManager.Init(this);
+            TableManager.Init(this);
 
             return currentSlide;
         }
 
         public void Write(PPTXTextRun Text)
         {
-            var lastTextArea = AddTextAreaIfEmpty();
-
-            if (currentSlide.TextAreas.Last().Transform.SizeY > 0)
+            if (TableManager.IsReadyCell)
             {
-                AddTextArea();
-                lastTextArea = currentSlide.TextAreas.Last();
+                TableManager.Write(Text);
             }
-
-            if (lastTextArea.Texts.Count == 0)
+            else
             {
-                lastTextArea.Texts.Add(new PPTXText());
-            }
-
-            var lastText = lastTextArea.Texts.Last();
-            if (WantReturn)
-            {
-                lastText = new PPTXText();
-                lastTextArea.Texts.Add(lastText);
-            }
-
-            if (FontStack.Count > 0)
-            {
-                Text.Font = FontStack.Peek();
-            }
-
-            if (LinkStack.Count > 0)
-            {
-                Text.Link = LinkStack.Peek();
-            }
-
-            lastText.Texts.Add(Text);
-
-            WantReturn = false;
+                TextManager.Write(Text);
+            } 
         }
 
         public void AddTextRow(PPTXText Text)
         {
-            var lastTextArea = AddTextAreaIfEmpty();
-
-            lastTextArea.Texts.Add(Text);
-
-            WantReturn = false;
+            TextManager.AddTextRow(Text);
         }
 
         public void WriteReturn()
         {
-            WantReturn = true;
+            TextManager.WriteReturn();
         }
 
         public PPTXTextArea AddTextArea()
         {
-            WantReturn = false;
-
-            currentSlide.TextAreas.Add(new PPTXTextArea(Settings.Margin.Left,
-                LastAddedItemTransform.PositionY + LastAddedItemTransform.SizeY + Settings.TextAreaMarginHeight,
-                PageWidth,
-                0));
-
-
-            return currentSlide.TextAreas.Last();
+            return TextManager.AddTextArea();
         }
 
         public void EndTextArea()
         {
-            var lastTextArea = AddTextAreaIfEmpty();
-            if (lastTextArea.Transform.SizeY > 0) return;
-
-            var lastTextAreaSize = 0.0f;
-
-            foreach (var _text in lastTextArea.Texts)
-            {
-                float maxFontHeight = 0;
-
-                foreach (var _textRun in _text.Texts)
-                {
-                    maxFontHeight = Math.Max(maxFontHeight, FontHeght(_textRun.Font) * 1.2f);
-                }
-
-                lastTextAreaSize += maxFontHeight;
-            }
-
-            lastTextArea.Transform.SizeY = lastTextAreaSize;
-            LastAddedItemTransform = lastTextArea.Transform;
-
-            WantReturn = false;
+            TextManager.EndTextArea();
         }
 
         public void PushFont(PPTXFont Font)
@@ -142,15 +94,7 @@ namespace MDToPPTX.Markdown
             FontStack.Pop();
         }
 
-        private PPTXTextArea AddTextAreaIfEmpty()
-        {
-            if (currentSlide.TextAreas.Count == 0)
-            {
-                AddTextArea();
-            }
-
-            return currentSlide.TextAreas.Last();
-        }
+        
 
         public void PushHyperLink(PPTXLink Link)
         {
@@ -164,13 +108,33 @@ namespace MDToPPTX.Markdown
 
         public void WriteImage(PPTXImage Image)
         {
-            WantReturn = false;
+            Image.Transform = NewTransform;
 
-            Image.Transform.PositionY = LastAddedItemTransform.PositionY + LastAddedItemTransform.SizeY + Settings.TextAreaMarginHeight;
+            using (System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(Image.ImageFilePath))
+            {
+                Image.Transform.SizeX = bitmap.Width / 1000.0f;
+                Image.Transform.SizeY = bitmap.Height / 1000.0f;
+            }
 
             currentSlide.Images.Add(Image);
 
             LastAddedItemTransform = Image.Transform;
+        }
+
+        public void AddTable(PPTXTable Table)
+        {
+            currentSlide.Tables.Add(Table);
+            TableManager.AddTable(Table);
+        }
+
+        public void AddTableEnd()
+        {
+            TableManager.AddTableEnd();
+        }
+
+        public void SetTableCell(int RowIndex, int ColIndex)
+        {
+            TableManager.SetTableCell(RowIndex, ColIndex);
         }
     }
 }

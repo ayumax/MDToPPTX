@@ -24,10 +24,7 @@ namespace MDToPPTX.Markdown.Renderers.PPTX.Inlines
 
         private void WriteImageLink(PPTXRenderer renderer, LinkInline link)
         {
-            renderer.WriteImage(new PPTXImage(link.Url)
-            {
-                Transform = new PPTXTransform(renderer.Options.Margin.Left, 0, 5, 3)
-            });
+            renderer.WriteImage(new PPTXImage(link.Url));
         }
 
         private void WriteHyperLink(PPTXRenderer renderer, LinkInline link)

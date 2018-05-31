@@ -143,8 +143,6 @@ namespace MDToPPTX.PPTX
         public PPTXFont CodeFont { get; set; } = new PPTXFont() { FontSize = 12 };
         public PPTXFont InlineCodeFont { get; set; } = new PPTXFont() { FontSize = 24, ForegroundColor = new PPTXColor(204, 51, 0) };
 
-        public float TextAreaMarginHeight { get; set; } = 0.3f;
-
         public PPTXSetting()
         {
             SlideLayouts = new Dictionary<EPPTXSlideLayoutType, PPTXSlideLayout>();

@@ -230,5 +230,20 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
         {
             Writer.PopHyperLink();
         }
+
+        public void AddTable(PPTXTable Table)
+        {
+            Writer.AddTable(Table);
+        }
+
+        public void AddTableEnd()
+        {
+            Writer.AddTableEnd();
+        }
+
+        public void SetTableCell(int RowIndex, int ColIndex)
+        {
+            Writer.SetTableCell(RowIndex, ColIndex);
+        }
     }
 }

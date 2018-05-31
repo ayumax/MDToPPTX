@@ -3,10 +3,13 @@
 // See the license.txt file in the project root for more information.
 
 using System;
+using System.Linq;
 using System.Globalization;
+using System.Collections.Generic;
 using Markdig.Renderers;
 using Markdig.Renderers.Html;
 using Markdig.Extensions.Tables;
+using MDToPPTX.PPTX;
 
 namespace MDToPPTX.Markdown.Renderers.PPTX
 {
@@ -17,123 +20,47 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
     {
         protected override void Write(PPTXRenderer renderer, Table table)
         {
-            renderer.Write("table");
-        //    renderer.EnsureLine();
-        //    renderer.Write("<table").WriteAttributes(table).WriteLine(">");
+            var tableObj = new PPTXTable();
 
-        //    bool hasBody = false;
-        //    bool hasAlreadyHeader = false;
-        //    bool isHeaderOpen = false;
+            foreach (var tableColumnDefinition in table.ColumnDefinitions)
+            {
+                var pptxTableColObj = new PPTXTableColumn();
+                tableObj.Columns.Add(pptxTableColObj);
+
+                var alignment = tableColumnDefinition.Alignment;
+                if (alignment.HasValue)
+                {
+                    switch (alignment)
+                    {
+                        case TableColumnAlign.Center:
+                            pptxTableColObj.Alignment = PPTXTableColumnAlign.Center;
+                            break;
+                        case TableColumnAlign.Right:
+                            pptxTableColObj.Alignment = PPTXTableColumnAlign.Right;
+                            break;
+                        case TableColumnAlign.Left:
+                            pptxTableColObj.Alignment = PPTXTableColumnAlign.Left;
+                            break;
+                    }
+                }
+            }
+
+            renderer.AddTable(tableObj);
 
 
-        //    bool hasColumnWidth = false;
-        //    foreach (var tableColumnDefinition in table.ColumnDefinitions)
-        //    {
-        //        if (tableColumnDefinition.Width != 0.0f && tableColumnDefinition.Width != 1.0f)
-        //        {
-        //            hasColumnWidth = true;
-        //            break;
-        //        }
-        //    }
+            foreach (var rowObjPair in table.Select((rowObj, rowIndex) => new { row = rowObj, rowIndex = rowIndex}))
+            {
+                var row = (TableRow)rowObjPair.row;
 
-        //    if (hasColumnWidth)
-        //    {
-        //        foreach (var tableColumnDefinition in table.ColumnDefinitions)
-        //        {
-        //            var width = Math.Round(tableColumnDefinition.Width*100)/100;
-        //            var widthValue = string.Format(CultureInfo.InvariantCulture, "{0:0.##}", width);
-        //            renderer.WriteLine($"<col style=\"width:{widthValue}%\">");
-        //        }
-        //    }
+                for (int i = 0; i < row.Count; i++)
+                {
+                    renderer.SetTableCell(rowObjPair.rowIndex, i);
 
-        //    foreach (var rowObj in table)
-        //    {
-        //        var row = (TableRow)rowObj;
-        //        if (row.IsHeader)
-        //        {
-        //            // Allow a single thead
-        //            if (!hasAlreadyHeader)
-        //            {
-        //                renderer.WriteLine("<thead>");
-        //                isHeaderOpen = true;
-        //            }
-        //            hasAlreadyHeader = true;
-        //        }
-        //        else if (!hasBody)
-        //        {
-        //            if (isHeaderOpen)
-        //            {
-        //                renderer.WriteLine("</thead>");
-        //                isHeaderOpen = false;
-        //            }
+                    renderer.WriteChildren((TableCell)row[i]);
+                }
+            }
 
-        //            renderer.WriteLine("<tbody>");
-        //            hasBody = true;
-        //        }
-        //        renderer.WriteLine("<tr>");
-        //        for (int i = 0; i < row.Count; i++)
-        //        {
-        //            var cellObj = row[i];
-        //            var cell = (TableCell)cellObj;
-
-        //            renderer.EnsureLine();
-        //            renderer.Write(row.IsHeader ? "<th" : "<td");
-        //            if (cell.ColumnSpan != 1)
-        //            {
-        //                renderer.Write($" colspan=\"{cell.ColumnSpan}\"");
-        //            }
-        //            if (cell.RowSpan != 1)
-        //            {
-        //                renderer.Write($" rowspan=\"{cell.RowSpan}\"");
-        //            }
-        //            if (table.ColumnDefinitions.Count > 0)
-        //            {
-        //                var columnIndex = cell.ColumnIndex < 0 || cell.ColumnIndex >= table.ColumnDefinitions.Count
-        //                    ? i
-        //                    : cell.ColumnIndex;
-        //                columnIndex = columnIndex >= table.ColumnDefinitions.Count ? table.ColumnDefinitions.Count - 1 : columnIndex;
-        //                var alignment = table.ColumnDefinitions[columnIndex].Alignment;
-        //                if (alignment.HasValue)
-        //                {
-        //                    switch (alignment)
-        //                    {
-        //                        case TableColumnAlign.Center:
-        //                            renderer.Write(" style=\"text-align: center;\"");
-        //                            break;
-        //                        case TableColumnAlign.Right:
-        //                            renderer.Write(" style=\"text-align: right;\"");
-        //                            break;
-        //                        case TableColumnAlign.Left:
-        //                            renderer.Write(" style=\"text-align: left;\"");
-        //                            break;
-        //                    }
-        //                }
-        //            }
-        //            renderer.WriteAttributes(cell);
-        //            renderer.Write(">");
-
-        //            var previousImplicitParagraph = renderer.ImplicitParagraph;
-        //            if (cell.Count == 1)
-        //            {
-        //                renderer.ImplicitParagraph = true;
-        //            }
-        //            renderer.Write(cell);
-        //            renderer.ImplicitParagraph = previousImplicitParagraph;
-
-        //            renderer.WriteLine(row.IsHeader ? "</th>" : "</td>");
-        //        }
-        //        renderer.WriteLine("</tr>");
-        //    }
-
-        //    if (hasBody)
-        //    {
-        //        renderer.WriteLine("</tbody>");
-        //    }
-        //    else if (isHeaderOpen)
-        //    {
-        //        renderer.WriteLine("</thead>");
-        //    }
-        //    renderer.WriteLine("</table>");
+            renderer.AddTableEnd();
         }
     }
 }

@@ -74,8 +74,6 @@ namespace MDToPPTX.PPTX
 
         public PPTXTextArea(float PositionX, float PositionY, float SizeX, float SizeY)
         {
-            this.Texts = new List<PPTXText>();
-
             this.Transform = new PPTXTransform()
             {
                 AutoLayout = false,
@@ -84,6 +82,11 @@ namespace MDToPPTX.PPTX
                 SizeX = SizeX,
                 SizeY = SizeY
             };
+        }
+
+        public PPTXTextArea(PPTXTransform Transform)
+        {
+            this.Transform = Transform;
         }
     }
 }

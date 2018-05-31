@@ -14,18 +14,13 @@ namespace MDToPPTX.PPTX
     public class PPTXTableColumn
     {
         public float Width { get; set; } = 0;
-
         public PPTXTableColumnAlign Alignment { get; set; } = PPTXTableColumnAlign.Center;
     }
 
-    public class PPTXTableRow
-    {
-        public List<PPTXTableCell> Cells { get; set; } = new List<PPTXTableCell>();
-    }
 
     public class PPTXTableCell
     {
-        public PPTXTextRun Text { get; set; } = new PPTXTextRun();
+        public PPTXText Texts { get; set; } = new PPTXText();
     }
 
     public class PPTXTable
@@ -33,6 +28,6 @@ namespace MDToPPTX.PPTX
         public PPTXTransform Transform { get; set; } = new PPTXTransform();
 
         public List<PPTXTableColumn> Columns { get; set; } = new List<PPTXTableColumn>();
-        public List<PPTXTableRow> Rows { get; set; } = new List<PPTXTableRow>();
+        public Dictionary<ValueTuple<int, int>, PPTXTableCell> Cells { get; set; } = new Dictionary<(int, int), PPTXTableCell>();
     }
 }
