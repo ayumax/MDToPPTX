@@ -33,6 +33,7 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
             ObjectRenderers.Add(new ThematicBreakRenderer());
             ObjectRenderers.Add(new LinkReferenceDefinitionGroupRenderer());
             ObjectRenderers.Add(new LinkReferenceDefinitionRenderer());
+            ObjectRenderers.Add(new TableRenderer());
 
             // Default inline renderers
             ObjectRenderers.Add(new AutolinkInlineRenderer());
