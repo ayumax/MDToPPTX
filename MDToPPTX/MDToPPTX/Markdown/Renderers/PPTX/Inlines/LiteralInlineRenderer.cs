@@ -10,10 +10,10 @@ namespace MDToPPTX.Markdown.Renderers.PPTX.Inlines
     {
         protected override void Write(PPTXRenderer renderer, LiteralInline obj)
         {
-            if (obj.IsFirstCharacterEscaped && obj.Content.Length > 0 && obj.Content[obj.Content.Start].IsAsciiPunctuation())
-            {
-                renderer.Write('\\');
-            }
+            //if (obj.IsFirstCharacterEscaped && obj.Content.Length > 0 && obj.Content[obj.Content.Start].IsAsciiPunctuation())
+            //{
+            //    renderer.Write('\\');
+            //}
             renderer.Write(ref obj.Content);
         }
     }

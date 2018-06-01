@@ -43,6 +43,11 @@ namespace MDToPPTX.Markdown
             CurrentTable = Table;
 
             Table.Transform = SlideManager.NewTransform;  
+
+            foreach(var col in Table.Columns)
+            {
+                col.Width = Table.Transform.SizeX / (float)Table.Columns.Count;
+            }
         }
 
         public void AddTableEnd()

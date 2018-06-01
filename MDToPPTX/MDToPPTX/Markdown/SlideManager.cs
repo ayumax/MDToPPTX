@@ -123,6 +123,8 @@ namespace MDToPPTX.Markdown
 
         public void AddTable(PPTXTable Table)
         {
+            PushFont(Settings.ListItemFont);
+
             currentSlide.Tables.Add(Table);
             TableManager.AddTable(Table);
         }
@@ -130,6 +132,8 @@ namespace MDToPPTX.Markdown
         public void AddTableEnd()
         {
             TableManager.AddTableEnd();
+
+            PopFont();
         }
 
         public void SetTableCell(int RowIndex, int ColIndex)

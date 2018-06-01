@@ -10,6 +10,7 @@ using Markdig.Renderers;
 using Markdig.Renderers.Html;
 using Markdig.Extensions.Tables;
 using MDToPPTX.PPTX;
+using MDToPPTX.PPTX.OpenXML;
 
 namespace MDToPPTX.Markdown.Renderers.PPTX
 {
@@ -25,8 +26,7 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
             foreach (var tableColumnDefinition in table.ColumnDefinitions)
             {
                 var pptxTableColObj = new PPTXTableColumn();
-                tableObj.Columns.Add(pptxTableColObj);
-
+                
                 var alignment = tableColumnDefinition.Alignment;
                 if (alignment.HasValue)
                 {
@@ -42,11 +42,12 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
                             pptxTableColObj.Alignment = PPTXTableColumnAlign.Left;
                             break;
                     }
+
+                    tableObj.Columns.Add(pptxTableColObj);
                 }
             }
 
             renderer.AddTable(tableObj);
-
 
             foreach (var rowObjPair in table.Select((rowObj, rowIndex) => new { row = rowObj, rowIndex = rowIndex}))
             {

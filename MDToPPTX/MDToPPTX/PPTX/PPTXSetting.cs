@@ -142,6 +142,7 @@ namespace MDToPPTX.PPTX
         public PPTXFont NormalFont { get; set; } = new PPTXFont() { FontSize = 24 };
         public PPTXFont CodeFont { get; set; } = new PPTXFont() { FontSize = 12 };
         public PPTXFont InlineCodeFont { get; set; } = new PPTXFont() { FontSize = 24, ForegroundColor = new PPTXColor(204, 51, 0) };
+        public PPTXFont ListItemFont { get; set; } = new PPTXFont() { FontSize = 18 };
 
         public PPTXSetting()
         {
