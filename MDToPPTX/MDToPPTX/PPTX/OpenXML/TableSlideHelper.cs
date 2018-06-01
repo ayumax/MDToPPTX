@@ -45,27 +45,9 @@ namespace MDToPPTX.PPTX.OpenXML
 
             table1.Append(tableGrid1);
 
-            foreach (var _rowGroupListPair in Content.Cells.GroupBy(_cell => _cell.Key.Item1)
-                .OrderBy(_groupList => _groupList.Key)
-                .Select((groupList, rowIndex) => new { groupList = groupList, rowIndex = rowIndex}))
+            foreach (var _tableRow in Content.Rows)
             {
-                List<ValueTuple<PPTXTableColumn, PPTXTableCell>> Cols = new List<(PPTXTableColumn, PPTXTableCell)>();
-                for (int col = 0; col < Content.Columns.Count; ++col)
-                {
-                    PPTXTableCell _cellItem = null;
-                    if (Content.Cells.ContainsKey((_rowGroupListPair.rowIndex, col)))
-                    {
-                        _cellItem = Content.Cells[(_rowGroupListPair.rowIndex, col)];
-                    }
-                    else
-                    {
-                        _cellItem = new PPTXTableCell();
-                    }
-
-                    Cols.Add((Content.Columns[col], _cellItem));                        
-                }
-
-                table1.Append(CreateRow(Cols, HyperLinkIDMap));
+                table1.Append(CreateRow(Content.Columns, _tableRow, HyperLinkIDMap));
             }
 
 
@@ -143,11 +125,11 @@ namespace MDToPPTX.PPTX.OpenXML
             return gridColumn1;
         }
 
-        private A.TableRow CreateRow(List<ValueTuple<PPTXTableColumn, PPTXTableCell>> Cols, Dictionary<string, string> HyperLinkIDMap)
+        private A.TableRow CreateRow(List<PPTXTableColumn> Cols, PPTXTableRow Row, Dictionary<string, string> HyperLinkIDMap)
         {
-            A.TableRow tableRow1 = new A.TableRow() { Height = 370840L };
+            A.TableRow tableRow1 = new A.TableRow() { Height = (Int64)(Row.Height * 100) };
 
-            foreach(var Cell in Cols)
+            foreach(var Cell in Cols.Select((Col, ColIndex)=> new { Col = Col, ColIndex = ColIndex }))
             {
                 A.TableCell tableCell1 = new A.TableCell();
 
@@ -158,12 +140,12 @@ namespace MDToPPTX.PPTX.OpenXML
                 textBody1.Append(bodyProperties1);
                 textBody1.Append(listStyle1);
 
-                foreach (var _textLine in Cell.Item2.Texts.Texts)
+                foreach (var _textLine in Row.Cells[Cell.ColIndex].Texts.Texts)
                 {
                     var paragraph = new A.Paragraph();
 
                     var cellAlign = A.TextAlignmentTypeValues.Center;
-                    switch (Cell.Item1.Alignment)
+                    switch (Cell.Col.Alignment)
                     {
                         case PPTXTableColumnAlign.Left:
                             cellAlign = A.TextAlignmentTypeValues.Left;

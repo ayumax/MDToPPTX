@@ -241,9 +241,21 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
             Writer.AddTableEnd();
         }
 
-        public void SetTableCell(int RowIndex, int ColIndex)
+
+        public void AddTableRow()
         {
-            Writer.SetTableCell(RowIndex, ColIndex);
+            Writer.AddTableRow();
         }
+
+        public void NextTableCell()
+        {
+            Writer.NextTableCell();
+        }
+
+        public void EndTableRow()
+        {
+            Writer.EndTableRow();
+        }
+
     }
 }

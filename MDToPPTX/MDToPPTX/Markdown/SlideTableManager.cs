@@ -56,32 +56,45 @@ namespace MDToPPTX.Markdown
 
             var lastTextAreaSize = 0.0f;
 
-            foreach (var _rowGroupList in CurrentTable.Cells.GroupBy(_cell => _cell.Key.Item1))
-            {
-                float maxFontHeight = 0;
-
-                foreach (var _rowGroup in _rowGroupList)
-                {
-                    foreach (var _textRun in _rowGroup.Value.Texts.Texts)
-                    {
-                        maxFontHeight = Math.Max(maxFontHeight, SlideManager.FontHeght(_textRun.Font) * 1.2f);
-                    }
-                }
-
-                lastTextAreaSize += maxFontHeight;
-            }
+            lastTextAreaSize = CurrentTable.Rows.Sum(_row => _row.Height);
 
             CurrentTable.Transform.SizeY = lastTextAreaSize;
             CurrentTableCell = null;
             CurrentTable = null;
         }
 
-        public void SetTableCell(int RowIndex, int ColIndex)
+        public void AddTableRow()
+        {
+            if (CurrentTable == null) return;
+
+            CurrentTable.Rows.Add(new PPTXTableRow());
+        }
+
+        public void NextTableCell()
         {
             if (CurrentTable == null) return;
 
             CurrentTableCell = new PPTXTableCell();
-            CurrentTable.Cells.Add((RowIndex, ColIndex), CurrentTableCell);
+            CurrentTable.Rows.Last().Cells.Add(CurrentTableCell);
+        }
+
+        public void EndTableRow()
+        {
+            if (CurrentTable == null) return;
+
+            float maxFontHeight = 0;
+
+            var lastRow = CurrentTable.Rows.Last();
+
+            foreach (var _cell in lastRow.Cells)
+            {
+                foreach (var _textRun in _cell.Texts.Texts)
+                {
+                    maxFontHeight = Math.Max(maxFontHeight, SlideManager.FontHeght(_textRun.Font) * 1.2f);
+                }
+            }
+
+            lastRow.Height = maxFontHeight;
         }
     }
 }

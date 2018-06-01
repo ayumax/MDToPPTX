@@ -51,14 +51,18 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
 
             foreach (var rowObjPair in table.Select((rowObj, rowIndex) => new { row = rowObj, rowIndex = rowIndex}))
             {
+                renderer.AddTableRow();
+
                 var row = (TableRow)rowObjPair.row;
 
                 for (int i = 0; i < row.Count; i++)
                 {
-                    renderer.SetTableCell(rowObjPair.rowIndex, i);
+                    renderer.NextTableCell();
 
                     renderer.WriteChildren((TableCell)row[i]);
                 }
+
+                renderer.EndTableRow();
             }
 
             renderer.AddTableEnd();

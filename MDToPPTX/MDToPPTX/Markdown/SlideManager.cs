@@ -136,9 +136,19 @@ namespace MDToPPTX.Markdown
             PopFont();
         }
 
-        public void SetTableCell(int RowIndex, int ColIndex)
+        public void AddTableRow()
         {
-            TableManager.SetTableCell(RowIndex, ColIndex);
+            TableManager.AddTableRow();
+        }
+
+        public void NextTableCell()
+        {
+            TableManager.NextTableCell();
+        }
+
+        public void EndTableRow()
+        {
+            TableManager.EndTableRow();
         }
     }
 }
