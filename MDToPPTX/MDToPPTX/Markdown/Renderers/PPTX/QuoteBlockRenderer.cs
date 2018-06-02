@@ -9,11 +9,15 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
     {
         protected override void Write(PPTXRenderer renderer, QuoteBlock obj)
         {
+            renderer.PushBlockSetting(renderer.Options.QuoteBlock);
+
             renderer.StartTextArea();
 
             renderer.WriteChildren(obj);
 
             renderer.EndTextArea();
+
+            renderer.PopBlockSetting();
         }
     }
 }

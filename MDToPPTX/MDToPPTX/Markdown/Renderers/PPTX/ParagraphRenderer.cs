@@ -11,14 +11,14 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
         {
             if (obj.Parent is MarkdownDocument)
             {
-                renderer.PushFont(renderer.Options.NormalFont);
+                renderer.PushBlockSetting(renderer.Options.Normal);
             }
 
             renderer.WriteLeafInline(obj);
 
             if (obj.Parent is MarkdownDocument)
             {
-                renderer.PopFont();
+                renderer.PopBlockSetting();
                 renderer.EndTextArea();
             }
         }

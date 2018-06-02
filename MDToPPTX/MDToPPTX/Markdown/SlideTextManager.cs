@@ -74,8 +74,10 @@ namespace MDToPPTX.Markdown
         {
             WantReturn = false;
 
-            var newTextArea = new PPTXTextArea(SlideManager.NewTransform);
+            var newTextArea = new PPTXTextArea(SlideManager.NewTransform());
             SlideManager.currentSlide.TextAreas.Add(newTextArea);
+
+            newTextArea.BackgroundColor = SlideManager.BlockSetting?.Background ?? new PPTXColor(System.Drawing.Color.Transparent);
 
             return newTextArea;
         }

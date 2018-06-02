@@ -42,7 +42,7 @@ namespace MDToPPTX.Markdown
         {
             CurrentTable = Table;
 
-            Table.Transform = SlideManager.NewTransform;  
+            Table.Transform = SlideManager.NewTransform();  
 
             foreach(var col in Table.Columns)
             {

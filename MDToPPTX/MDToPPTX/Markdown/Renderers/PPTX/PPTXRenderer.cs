@@ -196,9 +196,9 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
             Writer.WriteReturn();
         }
 
-        public PPTXTextArea StartTextArea()
+        public void StartTextArea()
         {
-            return Writer.AddTextArea();
+            Writer.AddTextArea();
         }
 
         public void EndTextArea()
@@ -211,14 +211,24 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
             Writer.AddTextRow(TextRow);
         }
 
-        public void PushFont(PPTXFont Font)
+        public void PushBlockSetting(PPTXBlockSetting BlockSetting)
         {
-            Writer.PushFont(Font);
+            Writer.PushBlockSetting(BlockSetting);
         }
 
-        public void PopFont()
+        public void PopBlockSetting()
         {
-            Writer.PopFont();
+            Writer.PopBlockSetting();
+        }
+
+        public void PushInlineSetting(PPTXInlineSetting InlieSetting)
+        {
+            Writer.PushInlineSetting(InlieSetting);
+        }
+
+        public void PopInline()
+        {
+            Writer.PopInline();
         }
 
         public void PushHyperLink(PPTXLink Link)

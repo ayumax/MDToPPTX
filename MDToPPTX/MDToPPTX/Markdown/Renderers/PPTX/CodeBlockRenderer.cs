@@ -12,17 +12,15 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
 
         protected override void Write(PPTXRenderer renderer, CodeBlock obj)
         {
-            var myArea = renderer.StartTextArea();
-            myArea.BackgroundColor = new PPTXColor(240, 240, 240);
+            renderer.PushBlockSetting(renderer.Options.Code);
 
-            renderer.PushFont(renderer.Options.CodeFont);
             renderer.Write(" ");
             renderer.WriteReturn();
             renderer.WriteLeafRawLines(obj);
             renderer.WriteReturn();
             renderer.Write(" ");
            
-            renderer.PopFont();
+            renderer.PopBlockSetting();
 
             renderer.EndTextArea();
         }

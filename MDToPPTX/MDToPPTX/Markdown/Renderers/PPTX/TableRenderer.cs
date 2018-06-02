@@ -47,6 +47,7 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
                 }
             }
 
+            renderer.PushBlockSetting(renderer.Options.Table);
             renderer.AddTable(tableObj);
 
             foreach (var rowObjPair in table.Select((rowObj, rowIndex) => new { row = rowObj, rowIndex = rowIndex}))
@@ -65,6 +66,7 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
                 renderer.EndTableRow();
             }
 
+            renderer.PopBlockSetting();
             renderer.AddTableEnd();
         }
     }

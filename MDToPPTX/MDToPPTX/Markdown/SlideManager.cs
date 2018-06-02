@@ -16,7 +16,7 @@ namespace MDToPPTX.Markdown
         public float FontHeght(PPTXFont Font) => 0.35278f / 10.0f * Font.FontSize;
         public float PageWidth => Settings.SlideWidth - (Settings.Margin.Left + Settings.Margin.Right);
 
-
+        public PPTXBlockSetting BlockSetting { get; private set; } = new PPTXBlockSetting();
         public Stack<PPTXFont> FontStack { get; private set;} = new Stack<PPTXFont>();
         public Stack<PPTXLink> LinkStack { get; private set; } = new Stack<PPTXLink>();
 
@@ -24,11 +24,6 @@ namespace MDToPPTX.Markdown
 
         private SlideTextManager TextManager = new SlideTextManager();
         private SlideTableManager TableManager = new SlideTableManager();
-
-        public PPTXTransform NewTransform => new PPTXTransform(Settings.Margin.Left,
-                LastAddedItemTransform.PositionY + LastAddedItemTransform.SizeY,
-                PageWidth,
-                0);
 
         public SlideManager(PPTXDocument document, PPTXSetting Settings)
         {
@@ -74,9 +69,9 @@ namespace MDToPPTX.Markdown
             TextManager.WriteReturn();
         }
 
-        public PPTXTextArea AddTextArea()
+        public void AddTextArea()
         {
-            return TextManager.AddTextArea();
+            TextManager.AddTextArea();
         }
 
         public void EndTextArea()
@@ -84,17 +79,27 @@ namespace MDToPPTX.Markdown
             TextManager.EndTextArea();
         }
 
-        public void PushFont(PPTXFont Font)
+        public void PushBlockSetting(PPTXBlockSetting BlockSetting)
         {
-            FontStack.Push(Font);
+            this.BlockSetting = BlockSetting;
+            FontStack.Push(BlockSetting.Font);
         }
 
-        public void PopFont()
+        public void PopBlockSetting()
         {
+            this.BlockSetting = null;
             FontStack.Pop();
         }
 
-        
+        public void PushInlineSetting(PPTXInlineSetting InlieSetting)
+        {
+            FontStack.Push(InlieSetting.Font);
+        }
+
+        public void PopInline()
+        {
+            FontStack.Pop();
+        }
 
         public void PushHyperLink(PPTXLink Link)
         {
@@ -108,7 +113,7 @@ namespace MDToPPTX.Markdown
 
         public void WriteImage(PPTXImage Image)
         {
-            Image.Transform = NewTransform;
+            Image.Transform = NewTransform();
 
             using (System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(Image.ImageFilePath))
             {
@@ -123,8 +128,6 @@ namespace MDToPPTX.Markdown
 
         public void AddTable(PPTXTable Table)
         {
-            PushFont(Settings.ListItemFont);
-
             currentSlide.Tables.Add(Table);
             TableManager.AddTable(Table);
         }
@@ -132,8 +135,6 @@ namespace MDToPPTX.Markdown
         public void AddTableEnd()
         {
             TableManager.AddTableEnd();
-
-            PopFont();
         }
 
         public void AddTableRow()
@@ -149,6 +150,16 @@ namespace MDToPPTX.Markdown
         public void EndTableRow()
         {
             TableManager.EndTableRow();
+        }
+
+        public PPTXTransform NewTransform()
+        {
+            var margin = BlockSetting?.Margin ?? new PPTXMargin();
+
+            return new PPTXTransform(Settings.Margin.Left + margin.Left,
+               LastAddedItemTransform.PositionY + LastAddedItemTransform.SizeY + margin.Top,
+               PageWidth - margin.Right,
+               0);
         }
     }
 }
