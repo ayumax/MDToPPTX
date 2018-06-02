@@ -50,11 +50,11 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
             renderer.PushBlockSetting(renderer.Options.Table);
             renderer.AddTable(tableObj);
 
-            foreach (var rowObjPair in table.Select((rowObj, rowIndex) => new { row = rowObj, rowIndex = rowIndex}))
+            foreach (var rowObj in table)
             {
                 renderer.AddTableRow();
 
-                var row = (TableRow)rowObjPair.row;
+                var row = (TableRow)rowObj;
 
                 for (int i = 0; i < row.Count; i++)
                 {

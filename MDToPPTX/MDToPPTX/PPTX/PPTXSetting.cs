@@ -10,6 +10,13 @@ namespace MDToPPTX.PPTX
         Screen16x9,
     }
 
+    public enum EPPTXHAlign
+    {
+        Left,
+        Center,
+        Right
+    }
+
     public class PPTXMargin
     {
         public float Left { get; set; } = 0;
@@ -31,7 +38,11 @@ namespace MDToPPTX.PPTX
         public string FontFamily { get; set; } = "メイリオ";
         public float FontSize { get; set; } = 28;
         public PPTXColor ForegroundColor { get; set; } = new PPTXColor(System.Drawing.Color.Black);
-    }
+        public bool Bold { get; set; } = false;
+        public bool Italic { get; set; } = false;
+        public bool UnderBar { get; set; } = false;
+        public EPPTXHAlign HAlign { get; set; } = EPPTXHAlign.Left;
+}
 
     public class PPTXInlineSetting
     {
