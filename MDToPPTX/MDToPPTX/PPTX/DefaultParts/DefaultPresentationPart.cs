@@ -13,7 +13,7 @@ namespace MDToPPTX.PPTX.DefaultParts
 {
     public class DefaultPresentationPart
     {
-        public static void CreatePresentationPart(PresentationPart part, PPTXSetting FileSettings)
+        public static void CreatePresentationPart(PresentationPart part, PPTXSetting FileSettings, PPTXSlideLayoutGroup SlideLayouts)
         {
             var partCreator = new DefaultPresentationPart();
             partCreator._CreatePresentationPart(part);
@@ -22,7 +22,7 @@ namespace MDToPPTX.PPTX.DefaultParts
 
             // 1枚目のスライド追加
             var topLayoutPart = new SlideLayout_TitleSlide();
-            topLayoutPart.Init(EPPTXSlideLayoutType.TitleSlide, FileSettings);
+            topLayoutPart.Init(EPPTXSlideLayoutType.TitleSlide, SlideLayouts);
             SlideLayoutPart slideLayoutPart1 = topLayoutPart.CreateSlideLayoutPart(slidePart1);
             SlideMasterPart slideMasterPart1 = DefaultSlideMasterPart.CreateSlideMasterPart(slideLayoutPart1, "rId1");
             ThemePart themePart1 = DefaultTheme.CreateTheme(slideMasterPart1);
@@ -41,7 +41,7 @@ namespace MDToPPTX.PPTX.DefaultParts
                 SlideLayoutPartBase otherLayoutPart = Activator.CreateInstance(otherLayoutPartType) as SlideLayoutPartBase;
                 if (otherLayoutPart != null)
                 {
-                    otherLayoutPart.Init(layoutType, FileSettings);
+                    otherLayoutPart.Init(layoutType, SlideLayouts);
                     SlideLayoutPart otherSlideLayoutPart = otherLayoutPart.CreateSlideLayoutPart(slideMasterPart1);
 
                     otherSlideLayoutPart.AddPart(slideMasterPart1, "rId1");

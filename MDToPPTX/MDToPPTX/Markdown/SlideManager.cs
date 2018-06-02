@@ -40,7 +40,7 @@ namespace MDToPPTX.Markdown
 
         public PPTXSlide CreateNewSlide()
         {
-            currentSlide = new PPTXSlide() { SlideLayout = Settings.SlideLayouts[EPPTXSlideLayoutType.BlankSheet] };
+            currentSlide = new PPTXSlide() { SlideLayout = EPPTXSlideLayoutType.BlankSheet };
             document.Slides.Add(currentSlide);
 
             FontStack.Clear();

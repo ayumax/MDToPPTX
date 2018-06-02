@@ -12,9 +12,9 @@ using A14 = DocumentFormat.OpenXml.Office2010.Drawing;
 
 namespace MDToPPTX.PPTX.OpenXML
 {
-    class SlideHelperBase
+    class SlideWriterHelper
     {
-        protected void SetSlideID(PresentationPart presentationPart, SlidePart slidePart1)
+        public static void SetSlideID(PresentationPart presentationPart, SlidePart slidePart1)
         {
             // Insert the new slide into the slide list after the previous slide.
             SlideIdList slideIdList = presentationPart.Presentation.SlideIdList;
@@ -39,7 +39,7 @@ namespace MDToPPTX.PPTX.OpenXML
             newSlideId.RelationshipId = presentationPart.GetIdOfPart(slidePart1);
         }
 
-        protected A.Transform2D CreateTransform2D(PPTXTransform transform)
+        public static A.Transform2D CreateTransform2D(PPTXTransform transform)
         {
             A.Transform2D transform2D25 = null;
 
@@ -64,7 +64,7 @@ namespace MDToPPTX.PPTX.OpenXML
             return transform2D25;
         }
 
-        protected Transform CreateTransform(PPTXTransform transform)
+        public static Transform CreateTransform(PPTXTransform transform)
         {
             Transform retTransform = null;
 
@@ -89,7 +89,7 @@ namespace MDToPPTX.PPTX.OpenXML
             return retTransform;
         }
 
-        protected int CreateHyperLinkMap(PPTXSlide SlideContent, SlidePart slidePart1, Dictionary<string, string> HyperLinkIDMap)
+        public static int CreateHyperLinkMap(PPTXSlide SlideContent, SlidePart slidePart1, Dictionary<string, string> HyperLinkIDMap)
         {
             int lastIndex = 2;
 
@@ -116,7 +116,7 @@ namespace MDToPPTX.PPTX.OpenXML
             return lastIndex;
         }
 
-        protected A.ParagraphProperties CrateParagraphProperties(PPTXText Content)
+        public static A.ParagraphProperties CrateParagraphProperties(PPTXText Content)
         {
             var paragraphPorp = new A.ParagraphProperties();
 
@@ -175,7 +175,7 @@ namespace MDToPPTX.PPTX.OpenXML
             return paragraphPorp;
         }
 
-        protected A.RunProperties CreateRunProperties(PPTXTextRun Text, Dictionary<string, string> HyperLinkIDMap)
+        public static A.RunProperties CreateRunProperties(PPTXTextRun Text, Dictionary<string, string> HyperLinkIDMap)
         {
             A.RunProperties runProperties3 = new A.RunProperties() { Kumimoji = true, Language = "ja-JP", AlternativeLanguage = "en-US", FontSize = (int)(Text.Font.FontSize * 100), Dirty = false };
             A.LatinFont latinFont1 = new A.LatinFont() { Typeface = Text.Font.FontFamily, Panose = "020B0604030504040204", PitchFamily = 50, CharacterSet = -128 };
@@ -202,6 +202,6 @@ namespace MDToPPTX.PPTX.OpenXML
             return runProperties3;
         }
 
-        protected A.RgbColorModelHex CreateRGBColorModeHex(PPTXColor Color) => new A.RgbColorModelHex() { Val = $"{Color.Color.R:X02}{Color.Color.G:X02}{Color.Color.B:X02}" };
+        public static A.RgbColorModelHex CreateRGBColorModeHex(PPTXColor Color) => new A.RgbColorModelHex() { Val = $"{Color.Color.R:X02}{Color.Color.G:X02}{Color.Color.B:X02}" };
     }
 }

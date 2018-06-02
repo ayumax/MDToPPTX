@@ -11,9 +11,9 @@ namespace MDToPPTX.PPTX.DefaultParts.SlideLayouts
     {
         protected PPTXSlideLayout LayoutSetting { get; private set; }
 
-        public void Init(EPPTXSlideLayoutType LayoutType, PPTXSetting FileSettings)
+        public void Init(EPPTXSlideLayoutType LayoutType, PPTXSlideLayoutGroup SlideLayouts)
         {
-            this.LayoutSetting = FileSettings.SlideLayouts[LayoutType];
+            this.LayoutSetting = SlideLayouts.SlideLayouts[LayoutType];
         }
 
         public abstract SlideLayoutPart CreateSlideLayoutPart(OpenXmlPartContainer containerPart);

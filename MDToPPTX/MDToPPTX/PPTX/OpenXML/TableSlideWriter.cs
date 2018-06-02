@@ -12,7 +12,7 @@ using A14 = DocumentFormat.OpenXml.Office2010.Drawing;
 
 namespace MDToPPTX.PPTX.OpenXML
 {
-    class TableSlideHelper : SlideHelperBase
+    class TableSlideWriter
     {
         public void AddContent(ShapeTree shapeTree1, uint ObjectID, PPTXTable Content, Dictionary<string, string> HyperLinkIDMap)
         {
@@ -20,7 +20,7 @@ namespace MDToPPTX.PPTX.OpenXML
 
             AddTableCommonProperty(graphicFrame1, ObjectID);
 
-            Transform transform1 = CreateTransform(Content.Transform);
+            Transform transform1 = SlideWriterHelper.CreateTransform(Content.Transform);
 
             A.Graphic graphic1 = new A.Graphic();
 
@@ -65,7 +65,7 @@ namespace MDToPPTX.PPTX.OpenXML
         {
             NonVisualGraphicFrameProperties nonVisualGraphicFrameProperties1 = new NonVisualGraphicFrameProperties();
 
-            NonVisualDrawingProperties nonVisualDrawingProperties2 = new NonVisualDrawingProperties() { Id = ObjectID, Name = "表 1" };
+            NonVisualDrawingProperties nonVisualDrawingProperties2 = new NonVisualDrawingProperties() { Id = ObjectID, Name = $"Table{ObjectID}" };
 
             A.NonVisualDrawingPropertiesExtensionList nonVisualDrawingPropertiesExtensionList1 = new A.NonVisualDrawingPropertiesExtensionList();
 
@@ -112,14 +112,6 @@ namespace MDToPPTX.PPTX.OpenXML
 
             A.ExtensionList extensionList1 = new A.ExtensionList();
 
-            A.Extension extension1 = new A.Extension() { Uri = "{9D8B030D-6E8A-4147-A177-3AD203B41FA5}" };
-
-            OpenXmlUnknownElement openXmlUnknownElement2 = OpenXmlUnknownElement.CreateOpenXmlUnknownElement("<a16:colId xmlns:a16=\"http://schemas.microsoft.com/office/drawing/2014/main\" val=\"3243622648\" />");
-
-            extension1.Append(openXmlUnknownElement2);
-
-            extensionList1.Append(extension1);
-
             gridColumn1.Append(extensionList1);
 
             return gridColumn1;
@@ -159,7 +151,7 @@ namespace MDToPPTX.PPTX.OpenXML
 
                     paragraph.Append(new A.Run()
                     {
-                        RunProperties = CreateRunProperties(_textLine, HyperLinkIDMap),
+                        RunProperties = SlideWriterHelper.CreateRunProperties(_textLine, HyperLinkIDMap),
                         Text = new A.Text(_textLine.Text)
                     });
 
@@ -176,14 +168,6 @@ namespace MDToPPTX.PPTX.OpenXML
            
 
             A.ExtensionList extensionList4 = new A.ExtensionList();
-
-            A.Extension extension4 = new A.Extension() { Uri = "{0D108BD9-81ED-4DB2-BD59-A6C34878D82A}" };
-
-            OpenXmlUnknownElement openXmlUnknownElement5 = OpenXmlUnknownElement.CreateOpenXmlUnknownElement("<a16:rowId xmlns:a16=\"http://schemas.microsoft.com/office/drawing/2014/main\" val=\"2927081048\" />");
-
-            extension4.Append(openXmlUnknownElement5);
-
-            extensionList4.Append(extension4);
 
             tableRow1.Append(extensionList4);
 
