@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Text;
 
@@ -43,7 +44,20 @@ namespace MDToPPTX.PPTX
         public bool UnderLine { get; set; } = false;
         public bool Strike { get; set; } = false;
         public EPPTXHAlign HAlign { get; set; } = EPPTXHAlign.Left;
-}
+
+        public PPTXFont Clone()
+        {
+            var newObj = new PPTXFont();
+
+            PropertyInfo[] infoArray = GetType().GetProperties();
+            foreach (PropertyInfo info in infoArray)
+            {
+                info.SetValue(newObj, info.GetValue(this));
+            }
+
+            return newObj;
+        }
+    }
 
     public class PPTXInlineSetting
     {

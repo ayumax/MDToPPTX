@@ -37,7 +37,10 @@ namespace MDToPPTX
 
         public static MarkdownDocument ToPPTX(string markdown, string pptxFilePath, PPTXSetting options = null, MarkdownPipeline pipeline = null)
         {
-            pipeline = pipeline ?? new MarkdownPipelineBuilder().UsePipeTables().Build();
+            pipeline = pipeline ?? new MarkdownPipelineBuilder()
+                .UsePipeTables()
+                .UseEmphasisExtras()
+                .Build();
             //pipeline = Markdig.Markdown.CheckForSelfPipeline(pipeline, markdown); 
 
             var document = Markdig.Markdown.Parse(markdown, pipeline);

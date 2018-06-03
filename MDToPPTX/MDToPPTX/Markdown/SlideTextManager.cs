@@ -41,10 +41,7 @@ namespace MDToPPTX.Markdown
                 lastTextArea.Texts.Add(lastText);
             }
 
-            if (SlideManager.FontStack.Count > 0)
-            {
-                Text.Font = SlideManager.FontStack.Peek();
-            }
+            Text.Font = SlideManager.CurrentFont;
 
             if (SlideManager.LinkStack.Count > 0)
             {

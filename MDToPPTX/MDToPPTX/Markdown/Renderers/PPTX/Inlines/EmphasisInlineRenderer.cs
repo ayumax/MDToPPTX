@@ -8,11 +8,33 @@ namespace MDToPPTX.Markdown.Renderers.PPTX.Inlines
     public class EmphasisInlineRenderer : PPTXObjectRenderer<EmphasisInline>
     {
         protected override void Write(PPTXRenderer renderer, EmphasisInline obj)
-        {
-            var emphasisText = new string(obj.DelimiterChar, obj.IsDouble ? 2 : 1);
-            renderer.Write(emphasisText);
+        {         
+            var cloneFont = renderer.Writer.CurrentFont.Clone();
+            
+            if (obj.DelimiterChar == '*' || obj.DelimiterChar == '_')
+            {
+                if (obj.IsDouble)
+                {
+                    cloneFont.Bold = true;
+                }
+                else
+                {
+                    cloneFont.Italic = true;
+                }
+            }
+            else if (obj.DelimiterChar == '~')
+            {
+                if (obj.IsDouble)
+                {
+                    cloneFont.Strike = true;
+                }
+            }
+
+            renderer.Writer.FontStack.Push(cloneFont);
+
             renderer.WriteChildren(obj);
-            renderer.Write(emphasisText);
+
+            renderer.Writer.FontStack.Pop();
         }
     }
 }

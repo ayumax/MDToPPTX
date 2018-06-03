@@ -163,5 +163,7 @@ namespace MDToPPTX.Markdown
                PageWidth - margin.Right,
                0);
         }
-    }
+
+        public PPTXFont CurrentFont => FontStack.Count > 0 ? FontStack.Peek() : Settings.Normal.Font;
+}
 }
