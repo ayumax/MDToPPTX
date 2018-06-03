@@ -120,7 +120,21 @@ namespace MDToPPTX.PPTX.OpenXML
         {
             var paragraphPorp = new A.ParagraphProperties();
 
-            //paragraphPorp.LineSpacing = new A.LineSpacing() { SpacingPercent = new A.SpacingPercent() { Val = 110000 } };
+            var firstTextRun = Content.Texts.FirstOrDefault();
+            if (firstTextRun == null) return paragraphPorp;
+
+            switch (firstTextRun.Font.HAlign)
+            {
+                case EPPTXHAlign.Left:
+                    paragraphPorp.Alignment = A.TextAlignmentTypeValues.Left;
+                    break;
+                case EPPTXHAlign.Center:
+                    paragraphPorp.Alignment = A.TextAlignmentTypeValues.Center;
+                    break;
+                case EPPTXHAlign.Right:
+                    paragraphPorp.Alignment = A.TextAlignmentTypeValues.Right;
+                    break;
+            }
 
             switch (Content.Bullet)
             {
@@ -178,6 +192,20 @@ namespace MDToPPTX.PPTX.OpenXML
         public static A.RunProperties CreateRunProperties(PPTXTextRun Text, Dictionary<string, string> HyperLinkIDMap)
         {
             A.RunProperties runProperties3 = new A.RunProperties() { Kumimoji = true, Language = "ja-JP", AlternativeLanguage = "en-US", FontSize = (int)(Text.Font.FontSize * 100), Dirty = false };
+
+            runProperties3.Bold = Text.Font.Bold;
+            runProperties3.Italic = Text.Font.Italic;
+
+            if (Text.Font.UnderLine)
+            {
+                runProperties3.Underline = A.TextUnderlineValues.Single;
+            }
+
+            if (Text.Font.Strike)
+            {
+                runProperties3.Strike = A.TextStrikeValues.SingleStrike;
+            }
+
             A.LatinFont latinFont1 = new A.LatinFont() { Typeface = Text.Font.FontFamily, Panose = "020B0604030504040204", PitchFamily = 50, CharacterSet = -128 };
             A.EastAsianFont eastAsianFont1 = new A.EastAsianFont() { Typeface = Text.Font.FontFamily, Panose = "020B0604030504040204", PitchFamily = 50, CharacterSet = -128 };
 

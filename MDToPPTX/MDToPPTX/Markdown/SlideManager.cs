@@ -40,6 +40,8 @@ namespace MDToPPTX.Markdown
 
             FontStack.Clear();
             LastAddedItemTransform = new PPTXTransform();
+            LastAddedItemTransform.SizeY = Settings.Margin.Top;
+
 
             TextManager.Init(this);
             TableManager.Init(this);

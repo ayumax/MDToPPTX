@@ -40,7 +40,8 @@ namespace MDToPPTX.PPTX
         public PPTXColor ForegroundColor { get; set; } = new PPTXColor(System.Drawing.Color.Black);
         public bool Bold { get; set; } = false;
         public bool Italic { get; set; } = false;
-        public bool UnderBar { get; set; } = false;
+        public bool UnderLine { get; set; } = false;
+        public bool Strike { get; set; } = false;
         public EPPTXHAlign HAlign { get; set; } = EPPTXHAlign.Left;
 }
 
@@ -70,7 +71,7 @@ namespace MDToPPTX.PPTX
 
         public PPTXBlockSetting Header1 { get; set; } = new PPTXBlockSetting()
         {
-            Font = new PPTXFont() { FontSize = 32, ForegroundColor = new PPTXColor(0, 0, 0) }
+            Font = new PPTXFont() { FontSize = 32, ForegroundColor = new PPTXColor(0, 0, 0), Bold = true, UnderLine = true, HAlign = EPPTXHAlign.Center }
         };
 
         public PPTXBlockSetting Header2 { get; set; } = new PPTXBlockSetting()

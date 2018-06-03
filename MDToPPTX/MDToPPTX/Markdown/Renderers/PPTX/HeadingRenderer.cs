@@ -9,18 +9,21 @@ namespace MDToPPTX.Markdown.Renderers.PPTX
     {
         protected override void Write(PPTXRenderer renderer, HeadingBlock obj)
         {
-            var setFont = renderer.Options.Normal;
+            var _block = renderer.Options.Normal;
             switch (obj.Level)
             {
                 case 1:
-                    setFont = renderer.Options.Header1;
+                    _block = renderer.Options.Header1;
                     break;
                 case 2:
-                    setFont = renderer.Options.Header2;
+                    _block = renderer.Options.Header2;
                     break;
             }
 
-            renderer.PushBlockSetting(setFont);
+            renderer.PushBlockSetting(_block);
+
+            renderer.StartTextArea();
+
             renderer.WriteLeafInline(obj);
             renderer.PopBlockSetting();
 
