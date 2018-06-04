@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // アセンブリに関する一般情報は以下の属性セットをとおして制御されます。
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
-[assembly: AssemblyTitle("MDToPPTXSample")]
+[assembly: AssemblyTitle("MarkPP")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MDToPPTXSample")]
+[assembly: AssemblyProduct("MarkPP")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // このプロジェクトが COM に公開される場合、次の GUID が typelib の ID になります
-[assembly: Guid("40785e78-c466-4359-ba83-b1136921fee8")]
+[assembly: Guid("b29989c1-4ce1-41c9-a1f0-4743145578f4")]
 
 // アセンブリのバージョン情報は次の 4 つの値で構成されています:
 //
