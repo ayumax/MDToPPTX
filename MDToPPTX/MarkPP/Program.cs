@@ -15,8 +15,10 @@ namespace MarkPP
             MDToPPTX.MDToPPTX pptxConverter = new MDToPPTX.MDToPPTX();
 
             string filepath = args[0];
+            string title = args[1] ?? "";
+            string subTitle = args[2] ?? "";
 
-            pptxConverter.Run(filepath);
+            pptxConverter.Run(filepath, title, subTitle);
         }
     }
 }
