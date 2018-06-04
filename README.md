@@ -80,3 +80,5 @@ class ClassA
 
 ## output PPTX
 ![sheet1](images/sheet1.JPG)
+![sheet2](images/sheet2.JPG)
+![sheet3](images/sheet3.JPG)
