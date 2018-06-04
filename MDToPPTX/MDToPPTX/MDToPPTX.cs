@@ -17,7 +17,7 @@ namespace MDToPPTX
         {
         }
 
-        public void Run(string MarkdownFilePath)
+        public void Run(string MarkdownFilePath, string PPTitle = "", string PPSubTitle = "")
         {
             var markdownText = "";
             using (StreamReader sr = new StreamReader(MarkdownFilePath))
@@ -28,8 +28,8 @@ namespace MDToPPTX
             var settings = new PPTXSetting()
             {
                 SlideSize = EPPTXSlideSizeValues.Screen4x3,
-                Title = "パワポサンプル",
-                SubTitle = "2018/5/3 ayumax"
+                Title = string.IsNullOrWhiteSpace(PPTitle) ? Path.GetFileNameWithoutExtension(MarkdownFilePath) : PPTitle,
+                SubTitle = PPSubTitle
             };
 
             ToPPTX(markdownText, MarkdownFilePath.ToLower().Replace(".md", ".pptx"), settings);
