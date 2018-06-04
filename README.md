@@ -79,4 +79,4 @@ class ClassA
 ```
 
 ## output PPTX
-![sheet1](images/sheet1.jpg)
+![sheet1](images/sheet1.jpg?raw=true)
