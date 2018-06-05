@@ -2,6 +2,18 @@
 マークダウン形式のファイルを読み込んでPowerPoint形式(pptx)のファイルを出力するライブラリ  
 .Net Standard 2.0対応
 
+マークダウンの解析には[markdig](https://github.com/lunet-io/markdig)を利用しています
+
+# 対応構文
++ HEADERS(Level1 or Level2に対応)
++ BLOCKQUOTES
++ LISTS
++ CODE BLOCKS
++ LINKS
++ EMPHASIS
++ Images(1pixel -> 1mmで配置)
++ Table
+
 ## MarkPP.exe
 MDToPPTXをWindowsで使用するための実行ファイル
 
