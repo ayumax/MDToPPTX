@@ -26,11 +26,13 @@ MarkPP.exe "markdownfle path" "title" "subtitle"
 [ハイパーリンク例](http://ayumax.hatenablog.com/)
 
 ↓コードブロック
-```
-class ClassA
-{
-    public ClassA()
-    {
+
+\```
+
+class ClassA  
+{  
+    public ClassA()  
+    { 
 
     }
 
@@ -38,8 +40,10 @@ class ClassA
     {
 
     }
-}
-```
+}  
+
+\```
+
 
 ---
 
@@ -76,6 +80,7 @@ class ClassA
 | 1行目左    | 1行目        | 1行目右      |
 | 2行目左    | 2行目        | 2行目右      |
 | 3行目左    | 3行目        | 3行目右      |    
+
 ```
 
 ## output PPTX
