@@ -27,6 +27,8 @@ MarkPP.exe "markdownfle path" "title" "subtitle"
 
 ## input Markdown例
 
+シートの境目には\---を記述します。  
+
 ```
 # テストシート1
 
