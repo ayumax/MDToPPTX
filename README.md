@@ -27,7 +27,7 @@ MarkPP.exe "markdownfle path" "title" "subtitle"
 
 ↓コードブロック
 
-\```
+```
 
 class ClassA  
 {  
@@ -42,7 +42,7 @@ class ClassA
     }
 }  
 
-\```
+```
 
 
 ---
