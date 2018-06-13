@@ -2,6 +2,18 @@
 マークダウン形式のファイルを読み込んでPowerPoint形式(pptx)のファイルを出力するライブラリ  
 .Net Standard 2.0対応
 
+マークダウンの解析には[markdig](https://github.com/lunet-io/markdig)を利用しています
+
+# 対応構文
++ HEADERS(Level1 or Level2に対応)
++ BLOCKQUOTES
++ LISTS
++ CODE BLOCKS
++ LINKS
++ EMPHASIS
++ Images(1pixel -> 1mmで配置)
++ Table
+
 ## MarkPP.exe
 MDToPPTXをWindowsで使用するための実行ファイル
 
@@ -15,6 +27,8 @@ MarkPP.exe "markdownfle path" "title" "subtitle"
 
 ## input Markdown例
 
+シートの境目には\---を記述します。  
+
 ```
 # テストシート1
 
@@ -26,11 +40,13 @@ MarkPP.exe "markdownfle path" "title" "subtitle"
 [ハイパーリンク例](http://ayumax.hatenablog.com/)
 
 ↓コードブロック
-```
-class ClassA
-{
-    public ClassA()
-    {
+
+```　　　
+
+class ClassA  
+{  
+    public ClassA()  
+    { 
 
     }
 
@@ -38,8 +54,10 @@ class ClassA
     {
 
     }
-}
-```
+}  
+
+```　　　
+
 
 ---
 
@@ -76,6 +94,7 @@ class ClassA
 | 1行目左    | 1行目        | 1行目右      |
 | 2行目左    | 2行目        | 2行目右      |
 | 3行目左    | 3行目        | 3行目右      |    
+
 ```
 
 ## output PPTX
