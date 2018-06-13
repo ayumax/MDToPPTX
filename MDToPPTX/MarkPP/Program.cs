@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MDToPPTX;
 
 namespace MarkPP
 {
@@ -12,13 +9,20 @@ namespace MarkPP
         {
             if (args.Length == 0) return;
 
-            MDToPPTX.MDToPPTX pptxConverter = new MDToPPTX.MDToPPTX();
+            MD2PPTX pptxConverter = new MD2PPTX();
 
             string filepath = args[0];
-            string title = args[1] ?? "";
-            string subTitle = args[2] ?? "";
+            string title = args.Length > 1 ? args[1] : "";
+            string subTitle = args.Length > 2 ? args[2] : "";
 
-            pptxConverter.Run(filepath, title, subTitle);
+            MDToPPTX.PPTX.PPTXSetting setting = new MDToPPTX.PPTX.PPTXSetting()
+            {
+                SlideSize = MDToPPTX.PPTX.EPPTXSlideSizeValues.Screen4x3,
+                Title = title,
+                SubTitle = subTitle
+            };
+
+            pptxConverter.Run(filepath, setting);
         }
     }
 }

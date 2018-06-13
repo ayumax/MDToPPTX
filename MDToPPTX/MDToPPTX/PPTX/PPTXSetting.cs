@@ -136,5 +136,27 @@ namespace MDToPPTX.PPTX
         {
         }
 
+        public static PPTXSetting Load(string LoadPath)
+        {
+            PPTXSetting retThis = null;
+
+            using (var reader = new System.IO.StreamReader(LoadPath))
+            {
+                retThis = Utf8Json.JsonSerializer.Deserialize<PPTXSetting>(reader.BaseStream);
+            }
+
+            return retThis;
+        }
+
+        public void Save(string SavePath)
+        {
+            var serializedBuffer = Utf8Json.JsonSerializer.Serialize(this);
+
+            using (var writer = new System.IO.StreamWriter(SavePath))
+            {
+                writer.Write(serializedBuffer);
+            }
+        }
+
     }
 }

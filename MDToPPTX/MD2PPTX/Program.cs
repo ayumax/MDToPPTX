@@ -8,7 +8,7 @@ namespace MD2PPTX
         {
             if (args.Length == 0) return;
 
-            MDToPPTX.MDToPPTX pptxConverter = new MDToPPTX.MDToPPTX();
+            MDToPPTX.MD2PPTX pptxConverter = new MDToPPTX.MD2PPTX();
 
             string filepath = args[0];
 

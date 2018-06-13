@@ -11,13 +11,13 @@ using MDToPPTX.Markdown.Renderers.PPTX;
 
 namespace MDToPPTX
 {
-    public class MDToPPTX
+    public class MD2PPTX
     {
-        public MDToPPTX()
+        public MD2PPTX()
         {
         }
 
-        public void Run(string MarkdownFilePath, string PPTitle = "", string PPSubTitle = "")
+        public void Run(string MarkdownFilePath, PPTXSetting options = null)
         {
             var markdownText = "";
             using (StreamReader sr = new StreamReader(MarkdownFilePath))
@@ -25,23 +25,20 @@ namespace MDToPPTX
                 markdownText = sr.ReadToEnd();
             }
 
-            var settings = new PPTXSetting()
-            {
-                SlideSize = EPPTXSlideSizeValues.Screen4x3,
-                Title = string.IsNullOrWhiteSpace(PPTitle) ? Path.GetFileNameWithoutExtension(MarkdownFilePath) : PPTitle,
-                SubTitle = PPSubTitle
-            };
-
-            ToPPTX(markdownText, MarkdownFilePath.ToLower().Replace(".md", ".pptx"), settings);
+            ToPPTX(markdownText, MarkdownFilePath.ToLower().Replace(".md", ".pptx"), options);
         }
 
         public static MarkdownDocument ToPPTX(string markdown, string pptxFilePath, PPTXSetting options = null, MarkdownPipeline pipeline = null)
         {
+            options = options ?? new PPTXSetting()
+            {
+                SlideSize = EPPTXSlideSizeValues.Screen4x3
+            };
+
             pipeline = pipeline ?? new MarkdownPipelineBuilder()
                 .UsePipeTables()
                 .UseEmphasisExtras()
                 .Build();
-            //pipeline = Markdig.Markdown.CheckForSelfPipeline(pipeline, markdown); 
 
             var document = Markdig.Markdown.Parse(markdown, pipeline);
 
@@ -49,7 +46,6 @@ namespace MDToPPTX
             {
                 var slide = new SlideManager(pptx, options);
 
-                // We override the renderer with our own writer
                 var renderer = new PPTXRenderer(slide, options);
                 pipeline.Setup(renderer);
 
