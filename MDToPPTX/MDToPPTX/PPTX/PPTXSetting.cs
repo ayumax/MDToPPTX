@@ -152,9 +152,9 @@ namespace MDToPPTX.PPTX
         {
             var serializedBuffer = Utf8Json.JsonSerializer.Serialize(this);
 
-            using (var writer = new System.IO.StreamWriter(SavePath))
+            using (var writer = new System.IO.FileStream(SavePath, System.IO.FileMode.Create))
             {
-                writer.Write(serializedBuffer);
+                writer.Write(serializedBuffer, 0, serializedBuffer.Length);
             }
         }
 

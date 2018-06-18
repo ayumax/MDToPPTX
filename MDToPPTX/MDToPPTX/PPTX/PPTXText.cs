@@ -65,7 +65,7 @@ namespace MDToPPTX.PPTX
         /// </summary>
         public List<PPTXText> Texts { get; set; } = new List<PPTXText>();
 
-        public PPTXColor BackgroundColor { get; set; } = new PPTXColor() { Color = System.Drawing.Color.Transparent };
+        public PPTXColor BackgroundColor { get; set; } = new PPTXColor() { A = 0 };
 
         public PPTXTextArea()
         {
