@@ -22,8 +22,12 @@ MDToPPTXをWindowsで使用するための実行ファイル
 以下のコマンドを実行する
 
 ```
-MarkPP.exe "markdownfle path" "title" "subtitle"
+MarkPP.exe "markdownfle path" "title" "subtitle" "setting json path"
 ```
++ markdownfle path:マークダウンファイルパス(*.md)
++ title:pptx1枚目に記述するタイトル
++ subtitle:pptx1枚目に記述するサブタイトル
++ setting json path:設定ファイルパス(*.json)
 
 ## input Markdown例
 
