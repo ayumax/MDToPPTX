@@ -34,7 +34,7 @@ namespace MarkPP
                 SubTitle = subTitle
             };
 
-            pptxConverter.Run(filepath, setting);
+            pptxConverter.RunFromMDFile(filepath, null, setting);
 
             //setting.Save(settingPath);
         }

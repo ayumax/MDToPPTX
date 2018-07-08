@@ -17,7 +17,12 @@ namespace MDToPPTX
         {
         }
 
-        public void Run(string MarkdownFilePath, PPTXSetting options = null)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="MarkdownFilePath"></param>
+        /// <param name="options"></param>
+        public void RunFromMDFile(string MarkdownFilePath, string ExportPath = null, PPTXSetting options = null)
         {
             var markdownText = "";
             using (StreamReader sr = new StreamReader(MarkdownFilePath))
@@ -25,10 +30,21 @@ namespace MDToPPTX
                 markdownText = sr.ReadToEnd();
             }
 
-            ToPPTX(markdownText, MarkdownFilePath.ToLower().Replace(".md", ".pptx"), options);
+            RunFromMDText(markdownText, ExportPath ?? MarkdownFilePath.ToLower().Replace(".md", ".pptx"), options);
         }
 
-        public static MarkdownDocument ToPPTX(string markdown, string pptxFilePath, PPTXSetting options = null, MarkdownPipeline pipeline = null)
+        /// <summary>
+        /// Convert Markdown text
+        /// </summary>
+        /// <param name="MarkdownText">Markdown text</param>
+        /// <param name="ExportPath">pptx file path</param>
+        /// <param name="options">Option setting</param>
+        public void RunFromMDText(string MarkdownText, string ExportPath, PPTXSetting options = null)
+        {
+            ToPPTX(MarkdownText, ExportPath, options);
+        }
+
+        protected static MarkdownDocument ToPPTX(string markdown, string pptxFilePath, PPTXSetting options = null, MarkdownPipeline pipeline = null)
         {
             options = options ?? new PPTXSetting()
             {
