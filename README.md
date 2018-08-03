@@ -1,37 +1,37 @@
 # MDToPPTX
-マークダウン形式のファイルを読み込んでPowerPoint形式(pptx)のファイルを出力するライブラリ  
-.Net Standard 2.0対応
+A library that reads markdown format files and outputs PowerPoint format (pptx) files.
+It is .Net Standard 2.0 compatible.
 
-マークダウンの解析には[markdig](https://github.com/lunet-io/markdig)を利用しています
+[Markdig](https://github.com/lunet-io/markdig) is used for analysis of markdown
 
-# 対応構文
-+ HEADERS(Level1 or Level2に対応)
+# Corresponding syntax
++ HEADERS(Corresponds to Level 1 or Level 2)
 + BLOCKQUOTES
 + LISTS
 + CODE BLOCKS
 + LINKS
 + EMPHASIS
-+ Images(1pixel -> 1mmで配置)
++ Images(1 pixel is arranged as 1 mm)
 + Table
 
 ## MarkPP.exe
-MDToPPTXをWindowsで使用するための実行ファイル
+Executable file for using MDToPPTX on Windows
 
-## MarkPP.exeの使い方
+## How to use MarkPP.exe
 
-以下のコマンドを実行する
+Execute the following command
 
 ```
 MarkPP.exe "markdownfle path" "title" "subtitle" "setting json path"
 ```
-+ markdownfle path:マークダウンファイルパス(*.md)
-+ title:pptx1枚目に記述するタイトル
-+ subtitle:pptx1枚目に記述するサブタイトル
-+ setting json path:設定ファイルパス(*.json)
++ markdownfle path:Markdown file path(*.md)
++ title:Title to be described on the first page of pptx
++ subtitle:Sub title to be described on the first page of pptx
++ setting json path:Configuration file path(*.json)
 
 ## input Markdown例
 
-シートの境目には\---を記述します。  
+Write \ --- on the boundary of the sheet.
 
 ```
 # テストシート1
