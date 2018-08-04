@@ -76,7 +76,7 @@ namespace MDToPPTX.PPTX
     {
         public EPPTXSlideSizeValues SlideSize { get; set; } = EPPTXSlideSizeValues.Screen4x3;
        
-        public string Title { get; set; } = "無題";
+        public string Title { get; set; } = "No title";
         public string SubTitle { get; set; } = "-";
 
         public float SlideWidth { get; set; } = 25;
@@ -150,6 +150,8 @@ namespace MDToPPTX.PPTX
 
         public void Save(string SavePath)
         {
+            if (string.IsNullOrWhiteSpace(SavePath)) return;
+
             var serializedBuffer = Utf8Json.JsonSerializer.Serialize(this);
 
             using (var writer = new System.IO.FileStream(SavePath, System.IO.FileMode.Create))
