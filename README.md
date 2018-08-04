@@ -11,7 +11,7 @@ It is .Net Standard 2.0 compatible.
 + CODE BLOCKS
 + LINKS
 + EMPHASIS
-+ Images(1 pixel is arranged as 1 mm)
++ Images(Setting with 96 dpi conversion)
 + Table
 
 ## MarkPP.exe
