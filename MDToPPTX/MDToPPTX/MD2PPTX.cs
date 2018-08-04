@@ -66,6 +66,8 @@ namespace MDToPPTX
                 pipeline.Setup(renderer);
 
                 renderer.Render(document);
+
+                slide.EndSheet();
             }
 
             return document;

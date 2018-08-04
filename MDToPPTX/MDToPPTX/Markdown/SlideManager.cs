@@ -15,9 +15,10 @@ namespace MDToPPTX.Markdown
 
         public float FontHeght(PPTXFont Font) => 0.35278f / 10.0f * Font.FontSize;
         public float PageWidth => Settings.SlideWidth - (Settings.Margin.Left + Settings.Margin.Right);
+        public float PageHeight => Settings.SlideHeight - (Settings.Margin.Top + Settings.Margin.Bottom);
 
         public PPTXBlockSetting BlockSetting { get; private set; } = new PPTXBlockSetting();
-        public Stack<PPTXFont> FontStack { get; private set;} = new Stack<PPTXFont>();
+        public Stack<PPTXFont> FontStack { get; private set; } = new Stack<PPTXFont>();
         public Stack<PPTXLink> LinkStack { get; private set; } = new Stack<PPTXLink>();
 
         public PPTXTransform LastAddedItemTransform = new PPTXTransform();
@@ -35,6 +36,10 @@ namespace MDToPPTX.Markdown
 
         public PPTXSlide CreateNewSlide()
         {
+            if (currentSlide != null)
+            {
+                EndSheet(currentSlide);
+            }
             currentSlide = new PPTXSlide() { SlideLayout = EPPTXSlideLayoutType.BlankSheet };
             document.Slides.Add(currentSlide);
 
@@ -58,7 +63,7 @@ namespace MDToPPTX.Markdown
             else
             {
                 TextManager.Write(Text);
-            } 
+            }
         }
 
         public void AddTextRow(PPTXText Text)
@@ -126,7 +131,7 @@ namespace MDToPPTX.Markdown
 
             currentSlide.Images.Add(Image);
 
-            LastAddedItemTransform = Image.Transform;
+            SetContentTransform(Image.Transform);
         }
 
         public void AddTable(PPTXTable Table)
@@ -166,5 +171,32 @@ namespace MDToPPTX.Markdown
         }
 
         public PPTXFont CurrentFont => FontStack.Count > 0 ? FontStack.Peek() : Settings.Normal.Font;
-}
+
+        public void SetContentTransform(PPTXTransform transform)
+        {
+            LastAddedItemTransform = transform;
+        }
+
+        public void EndSheet(PPTXSlide CurrentSheet = null)
+        {
+            var _CurrentSheet = CurrentSheet ?? currentSlide;
+
+            if (Settings.StackLayoutRule == EPPTXSideStackLayoutRule.Center)
+            {
+                var slideCenterY = PageHeight / 2.0f;
+                var contentCentetY = ((LastAddedItemTransform.PositionY + LastAddedItemTransform.SizeY) - Settings.Margin.Top) / 2.0f + Settings.Margin.Top;
+                var diffY = slideCenterY - contentCentetY;
+
+                _CurrentSheet.TextAreas.ForEach(_textArea => _textArea.Transform.PositionY += diffY);
+                _CurrentSheet.Tables.ForEach(_table => _table.Transform.PositionY += diffY);
+
+                var slideCenterX = PageWidth / 2.0f;
+                _CurrentSheet.Images.ForEach(_image => {
+                    var diffX = slideCenterX - (_image.Transform.PositionX + _image.Transform.SizeX / 2);
+                    _image.Transform.PositionX += diffX;
+                    _image.Transform.PositionY += diffY;
+                });
+            }
+        }
+    }
 }

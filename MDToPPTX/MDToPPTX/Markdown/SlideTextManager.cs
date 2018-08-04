@@ -99,7 +99,7 @@ namespace MDToPPTX.Markdown
             }
 
             lastTextArea.Transform.SizeY = lastTextAreaSize;
-            SlideManager.LastAddedItemTransform = lastTextArea.Transform;
+            SlideManager.SetContentTransform(lastTextArea.Transform);
 
             WantReturn = false;
         }

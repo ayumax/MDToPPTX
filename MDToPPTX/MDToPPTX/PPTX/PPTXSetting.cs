@@ -11,12 +11,26 @@ namespace MDToPPTX.PPTX
         Screen16x9,
     }
 
+    public enum EPPTXSideStackLayoutRule
+    {
+        /// <summary>
+        /// Layout from upper left to lower left
+        /// </summary>
+        Normal,
+        /// <summary>
+        /// Layout gathering in the middle
+        /// </summary>
+        Center
+    }
+
     public enum EPPTXHAlign
     {
         Left,
         Center,
         Right
     }
+
+
 
     public class PPTXMargin
     {
@@ -79,8 +93,11 @@ namespace MDToPPTX.PPTX
         public string Title { get; set; } = "No title";
         public string SubTitle { get; set; } = "-";
 
-        public float SlideWidth { get; set; } = 25;
+        public float SlideWidth { get; set; } = 25.4f;
+        public float SlideHeight { get; set; } = 19.05f;
         public PPTXMargin Margin { get; set; } = new PPTXMargin(1, 1, 1, 1);
+
+        public EPPTXSideStackLayoutRule StackLayoutRule { get; set; } = EPPTXSideStackLayoutRule.Normal;
 
 
         public PPTXBlockSetting Header1 { get; set; } = new PPTXBlockSetting()

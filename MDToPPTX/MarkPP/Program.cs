@@ -36,7 +36,10 @@ namespace MarkPP
 
             pptxConverter.RunFromMDFile(filepath, null, setting);
 
-            //setting.Save(settingPath);
+            if (string.IsNullOrWhiteSpace(settingPath) == false)
+            {
+                setting.Save(settingPath);
+            }
         }
     }
 }
