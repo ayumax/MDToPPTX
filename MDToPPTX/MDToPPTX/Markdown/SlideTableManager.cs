@@ -59,10 +59,10 @@ namespace MDToPPTX.Markdown
             lastTextAreaSize = CurrentTable.Rows.Sum(_row => _row.Height);
 
             CurrentTable.Transform.SizeY = lastTextAreaSize;
-            CurrentTableCell = null;
-            CurrentTable = null;
-
             SlideManager.SetContentTransform(CurrentTable.Transform);
+
+            CurrentTableCell = null;
+            CurrentTable = null;           
         }
 
         public void AddTableRow()

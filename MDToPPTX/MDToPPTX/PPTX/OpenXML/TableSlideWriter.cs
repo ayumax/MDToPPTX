@@ -132,7 +132,13 @@ namespace MDToPPTX.PPTX.OpenXML
                 textBody1.Append(bodyProperties1);
                 textBody1.Append(listStyle1);
 
-                foreach (var _textLine in Row.Cells[Cell.ColIndex].Texts.Texts)
+                var _texts = Row.Cells[Cell.ColIndex].Texts.Texts;
+                if (_texts.Count == 0)
+                {
+                    _texts.Add(new PPTXTextRun());
+                }
+
+                foreach (var _textLine in _texts)
                 {
                     var paragraph = new A.Paragraph();
 
