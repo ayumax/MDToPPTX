@@ -20,7 +20,12 @@ namespace MDToPPTX.PPTX
         /// <summary>
         /// Layout gathering in the middle
         /// </summary>
-        Center
+        Center,
+
+        /// <summary>
+        /// Make only the page with only one item the center
+        /// </summary>
+        CenterWithOnlyOneItem
     }
 
     public enum EPPTXHAlign

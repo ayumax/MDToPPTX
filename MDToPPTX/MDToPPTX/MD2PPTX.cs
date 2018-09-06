@@ -18,7 +18,7 @@ namespace MDToPPTX
         }
 
         /// <summary>
-        /// 
+        /// Convert Markdown text
         /// </summary>
         /// <param name="MarkdownFilePath"></param>
         /// <param name="options"></param>
@@ -39,12 +39,40 @@ namespace MDToPPTX
         /// <param name="MarkdownText">Markdown text</param>
         /// <param name="ExportPath">pptx file path</param>
         /// <param name="options">Option setting</param>
-        public void RunFromMDText(string MarkdownText, string ExportPath, PPTXSetting options = null)
+        public void RunFromMDText(string MarkdownText, string ExportPath, PPTXSetting options = null) => ToPPTX(MarkdownText, ExportPath, options);
+
+        protected static void ToPPTX(string markdown, string pptxFilePath, PPTXSetting options = null, MarkdownPipeline pipeline = null)
         {
-            ToPPTX(MarkdownText, ExportPath, options);
+            var pptx = ToPPTxDocument(markdown, options, pipeline);
+
+            pptx.SaveAs(pptxFilePath, options);
         }
 
-        protected static MarkdownDocument ToPPTX(string markdown, string pptxFilePath, PPTXSetting options = null, MarkdownPipeline pipeline = null)
+        /// <summary>
+        /// Make pptx document
+        /// </summary>
+        /// <param name="MarkdownFilePath"></param>
+        /// <param name="options"></param>
+        public PPTXDocument MakePPtxDocumentFromMDFile(string MarkdownFilePath, PPTXSetting options = null)
+        {
+            var markdownText = "";
+            using (StreamReader sr = new StreamReader(MarkdownFilePath))
+            {
+                markdownText = sr.ReadToEnd();
+            }
+
+            return MakePPtxDocumentFromMDText(markdownText, options);
+        }
+
+        /// <summary>
+        /// Convert Markdown text
+        /// </summary>
+        /// <param name="MarkdownText">Markdown text</param>
+        /// <param name="ExportPath">pptx file path</param>
+        /// <param name="options">Option setting</param>
+        public PPTXDocument MakePPtxDocumentFromMDText(string MarkdownText, PPTXSetting options = null) => ToPPTxDocument(MarkdownText, options);
+
+        protected static PPTXDocument ToPPTxDocument(string markdown, PPTXSetting options = null, MarkdownPipeline pipeline = null)
         {
             options = options ?? new PPTXSetting()
             {
@@ -58,19 +86,18 @@ namespace MDToPPTX
 
             var document = Markdig.Markdown.Parse(markdown, pipeline);
 
-            using (PPTXDocument pptx = new PPTXDocument(pptxFilePath, options))
-            {
-                var slide = new SlideManager(pptx, options);
+            var pptx = new PPTXDocument();
 
-                var renderer = new PPTXRenderer(slide, options);
-                pipeline.Setup(renderer);
+            var slide = new SlideManager(pptx, options);
 
-                renderer.Render(document);
+            var renderer = new PPTXRenderer(slide, options);
+            pipeline.Setup(renderer);
 
-                slide.EndSheet();
-            }
+            renderer.Render(document);
 
-            return document;
+            slide.EndSheet();
+
+            return pptx;
         }
     }
 }
