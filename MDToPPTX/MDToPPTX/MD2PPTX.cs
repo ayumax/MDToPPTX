@@ -13,16 +13,12 @@ namespace MDToPPTX
 {
     public class MD2PPTX
     {
-        public MD2PPTX()
-        {
-        }
-
         /// <summary>
         /// Convert Markdown text
         /// </summary>
         /// <param name="MarkdownFilePath"></param>
         /// <param name="options"></param>
-        public void RunFromMDFile(string MarkdownFilePath, string ExportPath = null, PPTXSetting options = null)
+        public static void RunFromMDFile(string MarkdownFilePath, string ExportPath = null, PPTXSetting options = null)
         {
             var markdownText = "";
             using (StreamReader sr = new StreamReader(MarkdownFilePath))
@@ -39,7 +35,7 @@ namespace MDToPPTX
         /// <param name="MarkdownText">Markdown text</param>
         /// <param name="ExportPath">pptx file path</param>
         /// <param name="options">Option setting</param>
-        public void RunFromMDText(string MarkdownText, string ExportPath, PPTXSetting options = null) => ToPPTX(MarkdownText, ExportPath, options);
+        public static void RunFromMDText(string MarkdownText, string ExportPath, PPTXSetting options = null) => ToPPTX(MarkdownText, ExportPath, options);
 
         protected static void ToPPTX(string markdown, string pptxFilePath, PPTXSetting options = null, MarkdownPipeline pipeline = null)
         {
@@ -53,7 +49,7 @@ namespace MDToPPTX
         /// </summary>
         /// <param name="MarkdownFilePath"></param>
         /// <param name="options"></param>
-        public PPTXDocument MakePPtxDocumentFromMDFile(string MarkdownFilePath, PPTXSetting options = null)
+        public static PPTXDocument MakePPtxDocumentFromMDFile(string MarkdownFilePath, PPTXSetting options = null)
         {
             var markdownText = "";
             using (StreamReader sr = new StreamReader(MarkdownFilePath))
@@ -70,7 +66,7 @@ namespace MDToPPTX
         /// <param name="MarkdownText">Markdown text</param>
         /// <param name="ExportPath">pptx file path</param>
         /// <param name="options">Option setting</param>
-        public PPTXDocument MakePPtxDocumentFromMDText(string MarkdownText, PPTXSetting options = null) => ToPPTxDocument(MarkdownText, options);
+        public static PPTXDocument MakePPtxDocumentFromMDText(string MarkdownText, PPTXSetting options = null) => ToPPTxDocument(MarkdownText, options);
 
         protected static PPTXDocument ToPPTxDocument(string markdown, PPTXSetting options = null, MarkdownPipeline pipeline = null)
         {

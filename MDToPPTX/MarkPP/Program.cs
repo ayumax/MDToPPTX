@@ -10,8 +10,6 @@ namespace MarkPP
         {
             if (args.Length == 0) return;
 
-            MD2PPTX pptxConverter = new MD2PPTX();
-
             string filepath = args[0];
             string title = args.Length > 1 ? args[1] : "";
             string subTitle = args.Length > 2 ? args[2] : "";
@@ -34,7 +32,7 @@ namespace MarkPP
                 SubTitle = subTitle
             };
 
-            pptxConverter.RunFromMDFile(filepath, null, setting);
+            MD2PPTX.RunFromMDFile(filepath, null, setting);
 
             if (string.IsNullOrWhiteSpace(settingPath) == false)
             {
