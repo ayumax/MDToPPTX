@@ -120,18 +120,22 @@ namespace MDToPPTX.Markdown
 
         public void WriteImage(PPTXImage Image)
         {
-            Image.Transform = NewTransform();
-
-            using (System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(Image.ImageFilePath))
+            if (System.IO.File.Exists(Image.ImageFilePath))
             {
-                // 1mm = 3.779528px(96dpi)
-                Image.Transform.SizeX = bitmap.Width / 3.779528f / 10.0f;
-                Image.Transform.SizeY = bitmap.Height / 3.779528f / 10.0f;
+                Image.Transform = NewTransform();
+
+                using (System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(Image.ImageFilePath))
+                {
+                    // 1mm = 3.779528px(96dpi)
+                    Image.Transform.SizeX = bitmap.Width / 3.779528f / 10.0f;
+                    Image.Transform.SizeY = bitmap.Height / 3.779528f / 10.0f;
+                }
+
+                currentSlide.Images.Add(Image);
+
+                SetContentTransform(Image.Transform);
             }
-
-            currentSlide.Images.Add(Image);
-
-            SetContentTransform(Image.Transform);
+            
         }
 
         public void AddTable(PPTXTable Table)
