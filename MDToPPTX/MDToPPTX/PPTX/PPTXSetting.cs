@@ -35,49 +35,6 @@ namespace MDToPPTX.PPTX
         Right
     }
 
-
-
-    public class PPTXMargin
-    {
-        public float Left { get; set; } = 0;
-        public float Top { get; set; } = 0;
-        public float Right { get; set; } = 0;
-        public float Bottom { get; set; } = 0;
-
-        public PPTXMargin(float Left = 0, float Top = 0, float Right = 0, float Bottom = 0)
-        {
-            this.Left = Left;
-            this.Top = Top;
-            this.Right = Right;
-            this.Bottom = Bottom;
-        }
-    }
-
-    public class PPTXFont
-    {
-        public string FontFamily { get; set; } = "メイリオ";
-        public float FontSize { get; set; } = 28;
-        public PPTXColor ForegroundColor { get; set; } = new PPTXColor(System.Drawing.Color.Black);
-        public bool Bold { get; set; } = false;
-        public bool Italic { get; set; } = false;
-        public bool UnderLine { get; set; } = false;
-        public bool Strike { get; set; } = false;
-        public EPPTXHAlign HAlign { get; set; } = EPPTXHAlign.Left;
-
-        public PPTXFont Clone()
-        {
-            var newObj = new PPTXFont();
-
-            PropertyInfo[] infoArray = GetType().GetProperties();
-            foreach (PropertyInfo info in infoArray)
-            {
-                info.SetValue(newObj, info.GetValue(this));
-            }
-
-            return newObj;
-        }
-    }
-
     public class PPTXInlineSetting
     {
         public PPTXFont Font { get; set; } = new PPTXFont();

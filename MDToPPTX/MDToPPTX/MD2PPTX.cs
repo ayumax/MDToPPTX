@@ -39,6 +39,11 @@ namespace MDToPPTX
 
         protected static void ToPPTX(string markdown, string pptxFilePath, PPTXSetting options = null, MarkdownPipeline pipeline = null)
         {
+            options = options ?? new PPTXSetting()
+            {
+                SlideSize = EPPTXSlideSizeValues.Screen4x3
+            };
+
             var pptx = ToPPTxDocument(markdown, options, pipeline);
 
             pptx.SaveAs(pptxFilePath, options);
